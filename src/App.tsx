@@ -125,6 +125,7 @@ export default function App() {
         step={50}
         min={10}
         placeholder={t("width")}
+        aria-label={t("width")}
         className="toolbar-field toolbar-field-number"
         inputStyle={{ width: "88px" }}
       />
@@ -137,6 +138,7 @@ export default function App() {
         step={50}
         min={10}
         placeholder={t("height")}
+        aria-label={t("height")}
         className="toolbar-field toolbar-field-number"
         inputStyle={{ width: "88px" }}
       />
@@ -147,6 +149,7 @@ export default function App() {
         options={FORMAT_OPTIONS}
         onChange={(e) => setFormat(e.value)}
         placeholder={t("format")}
+        ariaLabel={t("format")}
         className="toolbar-field toolbar-field-format"
         style={{ width: "190px" }}
       />
@@ -160,6 +163,7 @@ export default function App() {
         icon="pi pi-sync"
         onClick={handleGenerate}
         disabled={!isReady}
+        aria-label={t("generate")}
         size="small"
         raised
       />
@@ -169,6 +173,7 @@ export default function App() {
         severity="secondary"
         onClick={handleDownload}
         disabled={!previewUrl}
+        aria-label={t("download")}
         size="small"
         outlined
       />
@@ -180,14 +185,15 @@ export default function App() {
           size="small"
           rounded
           onClick={toggleTheme}
-          aria-label="toggle theme"
-          tooltip={isDark ? "Light mode" : "Dark mode"}
+          aria-label={isDark ? t("switchToLight") : t("switchToDark")}
+          tooltip={isDark ? t("switchToLight") : t("switchToDark")}
           tooltipOptions={{ position: "bottom" }}
         />
         <Dropdown
           value={i18n.language}
           options={LANGUAGES}
           onChange={(e) => i18n.changeLanguage(e.value)}
+          ariaLabel={t("language")}
           style={{ width: "112px" }}
         />
       </div>
@@ -203,17 +209,22 @@ export default function App() {
       style={{ display: "block", maxWidth: "80vw", maxHeight: "60vh" }}
     />
   ) : (
-    <div className="preview-placeholder">
+    <div className="preview-placeholder" role="img" aria-label={t("noImage")}>
       <i
         className="pi pi-image text-4xl mb-3"
         style={{ color: "var(--text-color-secondary)" }}
+        aria-hidden="true"
       />
       <span>{t("noImage")}</span>
     </div>
   );
 
   const cardFooter = (
-    <div className="flex justify-content-center">
+    <div
+      className="flex justify-content-center"
+      role="status"
+      aria-live="polite"
+    >
       <Tag
         value={specs ?? t("ready")}
         severity={specs ? "info" : undefined}
@@ -224,9 +235,15 @@ export default function App() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        {t("skipToContent")}
+      </a>
+
+      <h1 className="sr-only">{t("appTitle")}</h1>
+
       <Toolbar start={toolbarStart} end={toolbarEnd} className="app-toolbar" />
 
-      <main className="app-content">
+      <main id="main-content" className="app-content" tabIndex={-1}>
         <Card footer={cardFooter} className="preview-card">
           {cardContent}
         </Card>
