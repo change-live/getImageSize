@@ -1,0 +1,179 @@
+﻿// App-level layout & overrides
+// PrimeReact lara-cyan + PrimeFlex 3.x
+
+// 讓 #root 撐滿整個 viewport（不用 reset css）
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-ground);
+}
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1rem 1.5rem !important;
+  border-radius: 0 !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+
+  &.p-toolbar {
+    flex-wrap: nowrap;
+  }
+
+  .p-toolbar-group-start {
+    flex: 0 1 auto;
+    min-width: 0;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .p-toolbar-group-end {
+    flex: 0 0 auto;
+    margin-left: auto;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.toolbar-cluster {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  width: auto;
+}
+
+.toolbar-cluster-start {
+  justify-content: flex-start;
+}
+
+.toolbar-cluster-end {
+  justify-content: flex-end;
+}
+
+.toolbar-field {
+  flex: 0 1 auto;
+}
+
+.toolbar-field-number {
+  min-width: 0;
+}
+
+.toolbar-field-format {
+  min-width: 190px;
+}
+
+.toolbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 980px) {
+  .app-toolbar {
+    &.p-toolbar {
+      flex-wrap: wrap;
+    }
+
+    .p-toolbar-group-start,
+    .p-toolbar-group-end {
+      flex-basis: 100%;
+      margin-left: 0;
+    }
+
+    .p-toolbar-group-end {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+  }
+
+  .toolbar-cluster {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-toolbar {
+    padding: 1rem !important;
+
+    .p-toolbar-group-start,
+    .p-toolbar-group-end {
+      width: 100%;
+    }
+  }
+
+  .toolbar-cluster,
+  .toolbar-tools {
+    width: 100%;
+  }
+
+  .toolbar-cluster {
+    gap: 0.75rem;
+  }
+
+  .toolbar-cluster-start,
+  .toolbar-cluster-end,
+  .toolbar-tools {
+    justify-content: stretch;
+  }
+
+  .toolbar-field,
+  .toolbar-cluster > .p-button,
+  .toolbar-tools > .p-button,
+  .toolbar-tools > .p-dropdown {
+    width: 100%;
+  }
+
+  .toolbar-field-format {
+    min-width: 0;
+  }
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem 5rem;
+  background: var(--surface-ground);
+}
+
+.preview-card {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+
+  .p-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+
+  .p-card-footer {
+    padding-top: 0;
+  }
+
+  img {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 360px;
+  height: 220px;
+  border: 2px dashed var(--surface-border);
+  border-radius: 0.75rem;
+  background: var(--surface-ground);
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
