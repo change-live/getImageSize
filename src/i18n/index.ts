@@ -28,6 +28,7 @@ const resources = {
       switchToDark: "切換到深色模式",
       skipToContent: "跳到主要內容",
       noImage: "尚未生成圖片",
+      loadingImage: "外部圖片載入中...",
       ready: "READY",
       specs:
         "規格：{{width}} × {{height}} · {{format}} · {{source}} · 效果: {{effects}}",
@@ -59,6 +60,7 @@ const resources = {
       switchToDark: "Switch to dark mode",
       skipToContent: "Skip to main content",
       noImage: "No image generated yet",
+      loadingImage: "Loading external image...",
       ready: "READY",
       specs:
         "SPECS: {{width}} × {{height}} · {{format}} · {{source}} · FX: {{effects}}",

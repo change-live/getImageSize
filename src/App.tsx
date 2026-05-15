@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
@@ -6,6 +7,7 @@ import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
 import { Tag } from "primereact/tag";
 import { Toolbar } from "primereact/toolbar";
+import { DNA } from "react-loader-spinner";
 import { useTheme } from "./hooks/useTheme";
 import "./App.scss";
 
@@ -19,7 +21,7 @@ const FORMAT_OPTIONS = [
 ];
 
 const LANGUAGES = [
-  { label: "繁中", value: "zh-TW" },
+  { label: "繁體中文", value: "zh-TW" },
   { label: "EN", value: "en" },
 ];
 
@@ -118,12 +120,17 @@ export default function App() {
   const [blurAmount, setBlurAmount] = useState<number>(0);
   const [externalSeed, setExternalSeed] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isExternalLoading, setIsExternalLoading] = useState<boolean>(false);
   const [specs, setSpecs] = useState<string | null>(null);
 
   const downloadRef = useRef<HTMLAnchorElement>(null);
 
   const isReady = width != null && height != null && format != null;
   const supportsExternalSource = format === "jpg" || format === "webp";
+  const previewStageStyle: CSSProperties | undefined =
+    width != null && height != null
+      ? { aspectRatio: `${width} / ${height}` }
+      : undefined;
 
   const imageSourceOptions = IMAGE_SOURCE_OPTIONS.map((opt) => ({
     label: t(opt.labelKey),
@@ -155,12 +162,15 @@ export default function App() {
         nextSeed,
       );
       setExternalSeed(nextSeed);
+      setIsExternalLoading(true);
     } else if (format === "svg") {
       url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(generateSVGString(width, height))}`;
       setExternalSeed(null);
+      setIsExternalLoading(false);
     } else {
       url = generateCanvasDataUrl(width, height, format);
       setExternalSeed(null);
+      setIsExternalLoading(false);
     }
 
     const sourceText =
@@ -186,7 +196,8 @@ export default function App() {
   };
 
   const handleDownload = async () => {
-    if (!previewUrl || !isReady || !downloadRef.current) return;
+    if (!previewUrl || !isReady || !downloadRef.current || isExternalLoading)
+      return;
 
     const fileName = `img_${width}x${height}.${format}`;
 
@@ -271,11 +282,17 @@ export default function App() {
           inputId="input-image-source"
           value={imageSource}
           options={imageSourceOptions}
-          onChange={(e) => setImageSource(e.value)}
+          onChange={(e) => {
+            const nextSource = e.value as "geometry" | "external";
+            setImageSource(nextSource);
+            if (nextSource !== "external") {
+              setIsExternalLoading(false);
+            }
+          }}
           placeholder={t("imageSource")}
           ariaLabel={t("imageSource")}
           className="toolbar-field toolbar-field-source"
-          style={{ width: "190px" }}
+          style={{ width: "260px" }}
         />
       )}
 
@@ -323,7 +340,7 @@ export default function App() {
         icon="pi pi-download"
         severity="secondary"
         onClick={handleDownload}
-        disabled={!previewUrl}
+        disabled={!previewUrl || isExternalLoading}
         aria-label={t("download")}
         size="small"
         outlined
@@ -345,7 +362,8 @@ export default function App() {
           options={LANGUAGES}
           onChange={(e) => i18n.changeLanguage(e.value)}
           ariaLabel={t("language")}
-          style={{ width: "112px" }}
+          className="toolbar-language-dropdown"
+          style={{ width: "152px" }}
         />
       </div>
     </div>
@@ -354,7 +372,38 @@ export default function App() {
   // ── Card content ───────────────────────────────────
 
   const cardContent = previewUrl ? (
-    <img src={previewUrl} alt={specs ?? ""} className="preview-image" />
+    <div className="preview-stage" style={previewStageStyle}>
+      {isExternalLoading ? (
+        <div
+          className="preview-loading-placeholder"
+          role="status"
+          aria-live="polite"
+          aria-label={t("loadingImage")}
+        >
+          <DNA visible height={88} width={88} ariaLabel="preview-loading-dna" />
+          <span>{t("loadingImage")}</span>
+        </div>
+      ) : (
+        <img
+          src={previewUrl}
+          alt={specs ?? ""}
+          className="preview-image"
+          onLoad={() => setIsExternalLoading(false)}
+          onError={() => setIsExternalLoading(false)}
+        />
+      )}
+
+      {isExternalLoading && (
+        <img
+          src={previewUrl}
+          alt=""
+          aria-hidden
+          className="preview-preload-image"
+          onLoad={() => setIsExternalLoading(false)}
+          onError={() => setIsExternalLoading(false)}
+        />
+      )}
+    </div>
   ) : (
     <div className="preview-placeholder" role="img" aria-label={t("noImage")}>
       <i
