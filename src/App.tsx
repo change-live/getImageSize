@@ -203,11 +203,7 @@ export default function App() {
   // ── Card content ───────────────────────────────────
 
   const cardContent = previewUrl ? (
-    <img
-      src={previewUrl}
-      alt={specs ?? ""}
-      style={{ display: "block", maxWidth: "80vw", maxHeight: "60vh" }}
-    />
+    <img src={previewUrl} alt={specs ?? ""} className="preview-image" />
   ) : (
     <div className="preview-placeholder" role="img" aria-label={t("noImage")}>
       <i

@@ -205,7 +205,13 @@
     padding-top: 2rem;
   }
 
-  img {
+  .preview-image {
+    display: block;
+    max-width: 100%;
+    max-height: 60vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
     border-radius: 0.5rem;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   }
