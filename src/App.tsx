@@ -23,6 +23,30 @@ const LANGUAGES = [
   { label: "EN", value: "en" },
 ];
 
+const IMAGE_SOURCE_OPTIONS = [
+  { labelKey: "imageSourceGeometry", value: "geometry" },
+  { labelKey: "imageSourceExternal", value: "external" },
+];
+
+function buildPicsumUrl(
+  w: number,
+  h: number,
+  format: "jpg" | "webp",
+  grayscale: boolean,
+  blurAmount: number,
+  seed: string,
+): string {
+  const params: string[] = [];
+  if (grayscale) {
+    params.push("grayscale");
+  }
+  if (blurAmount > 0) {
+    params.push(`blur=${blurAmount}`);
+  }
+  const qs = params.length > 0 ? `?${params.join("&")}` : "";
+  return `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}.${format}${qs}`;
+}
+
 // ── art helpers ────────────────────────────────────────
 
 function getArtData(w: number, h: number) {
@@ -87,29 +111,109 @@ export default function App() {
   const [width, setWidth] = useState<number | null>(null);
   const [height, setHeight] = useState<number | null>(null);
   const [format, setFormat] = useState<string | null>(null);
+  const [imageSource, setImageSource] = useState<"geometry" | "external">(
+    "geometry",
+  );
+  const [useGrayscale, setUseGrayscale] = useState<boolean>(false);
+  const [blurAmount, setBlurAmount] = useState<number>(0);
+  const [externalSeed, setExternalSeed] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [specs, setSpecs] = useState<string | null>(null);
 
   const downloadRef = useRef<HTMLAnchorElement>(null);
 
   const isReady = width != null && height != null && format != null;
+  const supportsExternalSource = format === "jpg" || format === "webp";
+
+  const imageSourceOptions = IMAGE_SOURCE_OPTIONS.map((opt) => ({
+    label: t(opt.labelKey),
+    value: opt.value,
+  }));
+
+  const grayscaleOptions = [
+    { label: t("grayscaleOffLabel"), value: false },
+    { label: t("grayscaleOnLabel"), value: true },
+  ];
+
+  const blurOptions = Array.from({ length: 11 }, (_, n) => ({
+    label: n === 0 ? t("blurNoneLabel") : t("blurLevelLabel", { level: n }),
+    value: n,
+  }));
 
   const handleGenerate = () => {
     if (!isReady) return;
     let url: string;
-    if (format === "svg") {
+    if (supportsExternalSource && imageSource === "external") {
+      const nextSeed = `${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
+      const externalFormat = format as "jpg" | "webp";
+      url = buildPicsumUrl(
+        width,
+        height,
+        externalFormat,
+        useGrayscale,
+        blurAmount,
+        nextSeed,
+      );
+      setExternalSeed(nextSeed);
+    } else if (format === "svg") {
       url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(generateSVGString(width, height))}`;
+      setExternalSeed(null);
     } else {
       url = generateCanvasDataUrl(width, height, format);
+      setExternalSeed(null);
     }
+
+    const sourceText =
+      supportsExternalSource && imageSource === "external"
+        ? t("imageSourceExternal")
+        : t("imageSourceGeometry");
+    const effects: string[] = [];
+    if (supportsExternalSource && imageSource === "external") {
+      if (useGrayscale) effects.push("grayscale");
+      if (blurAmount > 0) effects.push(`blur:${blurAmount}`);
+    }
+
     setPreviewUrl(url);
-    setSpecs(t("specs", { width, height, format: format.toUpperCase() }));
+    setSpecs(
+      t("specs", {
+        width,
+        height,
+        format: format.toUpperCase(),
+        source: sourceText,
+        effects: effects.join(", ") || t("none"),
+      }),
+    );
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!previewUrl || !isReady || !downloadRef.current) return;
+
+    const fileName = `img_${width}x${height}.${format}`;
+
+    if (
+      supportsExternalSource &&
+      imageSource === "external" &&
+      externalSeed !== null
+    ) {
+      try {
+        const response = await fetch(previewUrl);
+        if (!response.ok)
+          throw new Error(`Download failed: ${response.status}`);
+
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        downloadRef.current.href = objectUrl;
+        downloadRef.current.download = fileName;
+        downloadRef.current.click();
+        URL.revokeObjectURL(objectUrl);
+        return;
+      } catch {
+        // Fall back to direct link if blob download is blocked by network/CORS.
+      }
+    }
+
     downloadRef.current.href = previewUrl;
-    downloadRef.current.download = `img_${width}x${height}.${format}`;
+    downloadRef.current.download = fileName;
     downloadRef.current.click();
   };
 
@@ -147,12 +251,59 @@ export default function App() {
         inputId="input-format"
         value={format}
         options={FORMAT_OPTIONS}
-        onChange={(e) => setFormat(e.value)}
+        onChange={(e) => {
+          const nextFormat = e.value as string | null;
+          setFormat(nextFormat);
+          if (nextFormat !== "jpg" && nextFormat !== "webp") {
+            setImageSource("geometry");
+            setUseGrayscale(false);
+            setBlurAmount(0);
+          }
+        }}
         placeholder={t("format")}
         ariaLabel={t("format")}
         className="toolbar-field toolbar-field-format"
         style={{ width: "190px" }}
       />
+
+      {supportsExternalSource && (
+        <Dropdown
+          inputId="input-image-source"
+          value={imageSource}
+          options={imageSourceOptions}
+          onChange={(e) => setImageSource(e.value)}
+          placeholder={t("imageSource")}
+          ariaLabel={t("imageSource")}
+          className="toolbar-field toolbar-field-source"
+          style={{ width: "190px" }}
+        />
+      )}
+
+      {supportsExternalSource && imageSource === "external" && (
+        <>
+          <Dropdown
+            inputId="input-grayscale"
+            value={useGrayscale}
+            options={grayscaleOptions}
+            onChange={(e) => setUseGrayscale(Boolean(e.value))}
+            placeholder={t("grayscale")}
+            ariaLabel={t("grayscale")}
+            className="toolbar-field toolbar-field-advanced"
+            style={{ width: "220px" }}
+          />
+
+          <Dropdown
+            inputId="input-blur"
+            value={blurAmount}
+            options={blurOptions}
+            onChange={(e) => setBlurAmount(e.value ?? 0)}
+            placeholder={t("blur")}
+            ariaLabel={t("blur")}
+            className="toolbar-field toolbar-field-advanced"
+            style={{ width: "220px" }}
+          />
+        </>
+      )}
     </div>
   );
 
@@ -216,15 +367,12 @@ export default function App() {
   );
 
   const cardFooter = (
-    <div
-      className="flex justify-content-center"
-      role="status"
-      aria-live="polite"
-    >
+    <div className="spec-footer" role="status" aria-live="polite">
       <Tag
         value={specs ?? t("ready")}
         severity={specs ? "info" : undefined}
         rounded
+        className="spec-tag"
       />
     </div>
   );
