@@ -100,13 +100,21 @@
   min-width: 190px;
 }
 
+.toolbar-field-source {
+  min-width: 190px;
+}
+
+.toolbar-field-advanced {
+  min-width: 150px;
+}
+
 .toolbar-tools {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1320px) {
   .app-toolbar {
     &.p-toolbar {
       flex-wrap: wrap;
@@ -229,6 +237,47 @@
   background: var(--surface-ground);
   color: var(--text-color-secondary);
   font-size: 0.9rem;
+}
+
+.spec-footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 0.25rem;
+}
+
+.spec-tag.p-tag {
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.6;
+  text-align: center;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.9rem;
+}
+
+.spec-tag .p-tag-value {
+  white-space: normal;
+  word-break: break-word;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .app-content {
+    padding: 1.75rem 0.75rem 3rem;
+  }
+
+  .preview-card {
+    .p-card-footer {
+      padding-top: 1rem;
+    }
+  }
+
+  .spec-tag.p-tag {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    padding: 0.55rem 1rem;
+    border-radius: 0.8rem;
+  }
 }
 
 [data-theme="dark"] {
