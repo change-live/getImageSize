@@ -156,9 +156,15 @@
 
   .toolbar-field,
   .toolbar-cluster > .p-button,
-  .toolbar-tools > .p-button,
   .toolbar-tools > .p-dropdown {
     width: 100%;
+  }
+
+  .toolbar-tools > .p-button.p-button-icon-only {
+    width: 2.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 auto;
   }
 
   .toolbar-field-format {
