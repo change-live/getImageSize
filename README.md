@@ -1,91 +1,72 @@
 # 圖片生成器 · Image Generator
 
-產生任意尺寸的佔位圖片，支援 SVG / PNG / JPG / WebP 格式，可直接下載使用。
+一款現代化、響應式的佔位圖片生成工具。支援自訂尺寸、多種圖片格式、外部圖庫來源，以及豐富的濾鏡特效。
 
-## 功能
+## ✨ 核心功能
 
-- 自訂寬高（可使用 ±50 快捷步進）
-- 輸出格式：SVG、PNG、JPG、WebP
-- 即時預覽生成結果
-- 一鍵下載
-- 深色 / 淺色模式切換（跟隨系統或手動切換）
-- 多語系：繁體中文 / English
+- **🎨 自訂生成規格**
+  - **尺寸控制**：自由設定寬度與高度（支援 ±50 快捷步進）。
+  - **多格式輸出**：支援 SVG、PNG、JPG、WebP 格式，一鍵快速下載。
+- **🖼️ 圖片來源切換**
+  - **幾何圖片 (Geometry)**：純色極簡的佔位圖片。
+  - **外部圖庫 (Picsum / LoremFlickr)**：動態載入真實的攝影照片（僅支援 JPG / WebP）。
+- **🪄 視覺特效 (FX)**
+  - **灰階 (Grayscale)**：支援一鍵將照片轉換為黑白。
+  - **模糊 (Blur)**：提供 0~10 級的模糊效果調整。
+- **⚙️ 現代化 UI 與體驗**
+  - **動態主題切換**：內建 5 款 PrimeReact 主題（Lara Cyan, Indigo, Green, Blue, MD Indigo）。
+  - **深色模式 (Dark Mode)**：自由切換淺色與深色外觀。
+  - **多語系支援**：內建繁體中文與 English。
+  - **偏好記憶 (Persistence)**：您的主題、深色模式與語言偏好將自動儲存於瀏覽器 `localStorage`，下次造訪無需重新設定。
+  - **完美 RWD**：為手機與小螢幕最佳化的圖示彈出選單 (Icon Popup Menu) 設計，操作不擁擠。
 
-## 技術棧
+## 🛠️ 技術棧
 
 | 分類     | 套件                                     |
 | -------- | ---------------------------------------- |
-| 框架     | React 19 + TypeScript 6                  |
-| 建置工具 | Vite 8                                   |
-| UI 元件  | PrimeReact 10 + PrimeFlex 3 + PrimeIcons |
-| 樣式     | SCSS (sass)                              |
-| 國際化   | i18next + react-i18next                  |
-| 套件管理 | pnpm                                     |
+| **框架** | React 19 + TypeScript                    |
+| **建置** | Vite 8                                   |
+| **狀態** | Zustand 5                                |
+| **UI**   | PrimeReact 10 + PrimeFlex 3 + PrimeIcons |
+| **樣式** | SCSS (Sass)                              |
+| **語系** | i18next + react-i18next                  |
+| **路由** | react-router-dom                         |
 
-## 開發
+## 🚀 開發指南
 
 ```bash
-# 安裝依賴
+# 安裝依賴套件
 pnpm install
 
-# 啟動開發伺服器（port 3000）
+# 啟動本地開發伺服器
 pnpm dev
 
-# 建置
+# 專案建置與打包
 pnpm build
 
-# 預覽建置結果
+# 預覽打包結果
 pnpm preview
 ```
 
-## 路由結構（React Router）
+## 📦 部署到 GitHub Pages
 
-- 已啟用 `react-router-dom`
-- 路由入口：`src/router.tsx`
-- 目前路由：
-  - `/`（首頁，現有圖片工具）
-  - `/tools/image-size`（同一工具路由，方便未來整合多工具）
-- 若要新增新工具頁，直接在 `src/router.tsx` 增加新 route 即可
+本專案已設定妥善的自動部署工作流。
 
-## 部署到 GitHub Pages
+### 設定步驟：
+1. 將專案推送到 GitHub，預設分支使用 `main`。
+2. 進入 GitHub Repository 的 `Settings` → `Pages`。
+3. `Source` 選擇 `GitHub Actions`。
+4. 此後每次 `git push` 到 `main` 分支，都會自動觸發建置並發佈。
 
-### 1) 專案前處理（已完成）
+### 網址格式：
+- `https://<你的帳號>.github.io/<repo-name>/`
+- 例如：`https://change-live.github.io/getImageSize/`
 
-- `vite.config.ts` 已加入 `base` 自動判斷
-- `package.json` 已加入 `build:gh`
-- `.github/workflows/deploy-pages.yml` 已加入自動部署流程
-
-### 2) 你要做的設定
-
-1. 把專案推到 GitHub，預設分支使用 `main`。
-2. 到 GitHub Repo 的 `Settings` → `Pages`。
-3. `Source` 選 `GitHub Actions`。
-4. 之後每次 push 到 `main`，會自動 build 並發佈。
-
-### 3) 網址格式
-
-- Repo Pages 網址為：`https://<你的帳號>.github.io/<repo-name>/`
-- 例如 repo 名稱是 `getImageSize`：
-  `https://<你的帳號>.github.io/getImageSize/`
-
-### 4) 本機模擬 GitHub Pages 打包
-
-router.tsx # 路由設定
-
+### 本機模擬 GitHub Pages 建置：
 ```bash
+# 以相對路徑 base 進行打包
 pnpm build:gh
-pnpm preview
 
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+# 預覽打包結果
+pnpm preview:gh
 ```
