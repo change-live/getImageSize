@@ -25,6 +25,7 @@ const resources = {
       generate: "重新生成",
       download: "下載檔案",
       language: "語言",
+      theme: "主題",
       switchToLight: "切換到淺色模式",
       switchToDark: "切換到深色模式",
       skipToContent: "跳到主要內容",
@@ -59,6 +60,7 @@ const resources = {
       generate: "Generate",
       download: "Download",
       language: "Language",
+      theme: "Theme",
       switchToLight: "Switch to light mode",
       switchToDark: "Switch to dark mode",
       skipToContent: "Skip to main content",
@@ -72,11 +74,17 @@ const resources = {
   },
 };
 
+const savedLanguage = localStorage.getItem("app-language") || "zh-TW";
+
 i18n.use(initReactI18next).init({
   resources,
-  lng: "zh-TW",
+  lng: savedLanguage,
   fallbackLng: "en",
   interpolation: { escapeValue: false },
+});
+
+i18n.on("languageChanged", (lng) => {
+  localStorage.setItem("app-language", lng);
 });
 
 export default i18n;
