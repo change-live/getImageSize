@@ -32,21 +32,37 @@
 | **語系** | i18next + react-i18next                  |
 | **路由** | react-router-dom                         |
 
-## 🚀 開發指南
+## 🚀 開發與本地運作指南
 
-```bash
-# 安裝依賴套件
-pnpm install
+本專案使用 `pnpm` 作為套件管理工具，並透過 Vite 進行極速建置。
 
-# 啟動本地開發伺服器
-pnpm dev
+### 環境要求
+- Node.js >= 20
+- pnpm >= 8
 
-# 專案建置與打包
-pnpm build
+### 啟動步驟
+1. **安裝依賴套件**
+   ```bash
+   pnpm install
+   ```
 
-# 預覽打包結果
-pnpm preview
-```
+2. **啟動本地開發伺服器**
+   預設會在 `http://localhost:5173/` 啟動服務（依 Vite 預設 port，若被佔用則會自動順延）。
+   ```bash
+   pnpm dev
+   ```
+
+3. **專案建置與打包**
+   執行 TypeScript 型別檢查並打包出可用於 Production 的靜態檔案。
+   ```bash
+   pnpm build
+   ```
+
+4. **預覽打包結果**
+   在本地端模擬 Production 環境預覽。
+   ```bash
+   pnpm preview
+   ```
 
 ## 📦 部署到 GitHub Pages
 
