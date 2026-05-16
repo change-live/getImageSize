@@ -117,8 +117,6 @@
 
 
 
-
-
 @media (max-width: 1765px) {
   .app-toolbar {
     &.p-toolbar {
@@ -173,14 +171,12 @@
   }
 
   .toolbar-field,
-  .toolbar-cluster > .p-button,
-  .toolbar-tools > .p-dropdown {
+  .toolbar-cluster > .p-button {
     width: 100% !important;
     min-width: 0 !important;
   }
 
-  .toolbar-field-format,
-  .toolbar-tools .p-dropdown {
+  .toolbar-field-format {
     flex: 1 1 0 !important;
     width: 100% !important;
     max-width: 100% !important;
