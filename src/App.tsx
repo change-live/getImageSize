@@ -27,7 +27,8 @@ const LANGUAGES = [
 
 const IMAGE_SOURCE_OPTIONS = [
   { labelKey: "imageSourceGeometry", value: "geometry" },
-  { labelKey: "imageSourceExternal", value: "external" },
+  { labelKey: "imageSourcePicsum", value: "picsum" },
+  { labelKey: "imageSourceLoremFlickr", value: "loremflickr" },
 ];
 
 function buildPicsumUrl(
@@ -47,6 +48,16 @@ function buildPicsumUrl(
   }
   const qs = params.length > 0 ? `?${params.join("&")}` : "";
   return `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}.${format}${qs}`;
+}
+
+function buildLoremFlickrUrl(
+  w: number,
+  h: number,
+  grayscale: boolean,
+  lockId: number,
+): string {
+  const filter = grayscale ? "g/" : "";
+  return `https://loremflickr.com/${filter}${w}/${h}/all?lock=${lockId}`;
 }
 
 // ── art helpers ────────────────────────────────────────
@@ -113,7 +124,7 @@ export default function App() {
   const [width, setWidth] = useState<number | null>(null);
   const [height, setHeight] = useState<number | null>(null);
   const [format, setFormat] = useState<string | null>(null);
-  const [imageSource, setImageSource] = useState<"geometry" | "external">(
+  const [imageSource, setImageSource] = useState<"geometry" | "picsum" | "loremflickr">(
     "geometry",
   );
   const [useGrayscale, setUseGrayscale] = useState<boolean>(false);
@@ -127,9 +138,10 @@ export default function App() {
 
   const isReady = width != null && height != null && format != null;
   const supportsExternalSource = format === "jpg" || format === "webp";
+  const isExternal = imageSource === "picsum" || imageSource === "loremflickr";
   const isExternalSizeExceeded =
     supportsExternalSource &&
-    imageSource === "external" &&
+    isExternal &&
     ((width !== null && width > 5000) || (height !== null && height > 5000));
   const previewStageStyle: CSSProperties | undefined =
     width != null && height != null
@@ -154,17 +166,29 @@ export default function App() {
   const handleGenerate = () => {
     if (!isReady) return;
     let url: string;
-    if (supportsExternalSource && imageSource === "external") {
-      const nextSeed = `${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
+    if (supportsExternalSource && isExternal) {
+      const lockId = Math.floor(Math.random() * 1_000_000) + 1;
+      const nextSeed = `${Date.now()}-${lockId}`;
       const externalFormat = format as "jpg" | "webp";
-      url = buildPicsumUrl(
-        width,
-        height,
-        externalFormat,
-        useGrayscale,
-        blurAmount,
-        nextSeed,
-      );
+      
+      if (imageSource === "picsum") {
+        url = buildPicsumUrl(
+          width,
+          height,
+          externalFormat,
+          useGrayscale,
+          blurAmount,
+          nextSeed,
+        );
+      } else {
+        url = buildLoremFlickrUrl(
+          width,
+          height,
+          useGrayscale,
+          lockId,
+        );
+      }
+      
       setExternalSeed(nextSeed);
       setIsExternalLoading(true);
     } else if (format === "svg") {
@@ -178,13 +202,13 @@ export default function App() {
     }
 
     const sourceText =
-      supportsExternalSource && imageSource === "external"
-        ? t("imageSourceExternal")
+      supportsExternalSource && isExternal
+        ? (imageSource === "picsum" ? t("imageSourcePicsum") : t("imageSourceLoremFlickr"))
         : t("imageSourceGeometry");
     const effects: string[] = [];
-    if (supportsExternalSource && imageSource === "external") {
+    if (supportsExternalSource && isExternal) {
       if (useGrayscale) effects.push("grayscale");
-      if (blurAmount > 0) effects.push(`blur:${blurAmount}`);
+      if (imageSource === "picsum" && blurAmount > 0) effects.push(`blur:${blurAmount}`);
     }
 
     setPreviewUrl(url);
@@ -207,7 +231,7 @@ export default function App() {
 
     if (
       supportsExternalSource &&
-      imageSource === "external" &&
+      isExternal &&
       externalSeed !== null
     ) {
       try {
@@ -287,9 +311,9 @@ export default function App() {
           value={imageSource}
           options={imageSourceOptions}
           onChange={(e) => {
-            const nextSource = e.value as "geometry" | "external";
+            const nextSource = e.value as "geometry" | "picsum" | "loremflickr";
             setImageSource(nextSource);
-            if (nextSource !== "external") {
+            if (!["picsum", "loremflickr"].includes(nextSource)) {
               setIsExternalLoading(false);
             }
           }}
@@ -300,7 +324,7 @@ export default function App() {
         />
       )}
 
-      {supportsExternalSource && imageSource === "external" && (
+      {supportsExternalSource && isExternal && (
         <>
           <Dropdown
             inputId="input-grayscale"
@@ -313,16 +337,18 @@ export default function App() {
             style={{ width: "220px" }}
           />
 
-          <Dropdown
-            inputId="input-blur"
-            value={blurAmount}
-            options={blurOptions}
-            onChange={(e) => setBlurAmount(e.value ?? 0)}
-            placeholder={t("blur")}
-            ariaLabel={t("blur")}
-            className="toolbar-field toolbar-field-advanced"
-            style={{ width: "220px" }}
-          />
+          {imageSource === "picsum" && (
+            <Dropdown
+              inputId="input-blur"
+              value={blurAmount}
+              options={blurOptions}
+              onChange={(e) => setBlurAmount(e.value ?? 0)}
+              placeholder={t("blur")}
+              ariaLabel={t("blur")}
+              className="toolbar-field toolbar-field-advanced"
+              style={{ width: "220px" }}
+            />
+          )}
         </>
       )}
     </div>
