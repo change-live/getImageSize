@@ -47,7 +47,7 @@
    ```
 
 2. **啟動本地開發伺服器**
-   預設會在 `http://localhost:5173/` 啟動服務（依 Vite 預設 port，若被佔用則會自動順延）。
+   專案已於 `vite.config.ts` 中指定在 `http://localhost:3000/` 啟動服務。
    ```bash
    pnpm dev
    ```
