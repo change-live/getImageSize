@@ -32,6 +32,7 @@ const resources = {
       ready: "READY",
       specs:
         "規格：{{width}} × {{height}} · {{format}} · {{source}} · 效果: {{effects}}",
+      errorExternalSizeExceeded: "外部圖片尺寸最大僅支援到 5000×5000",
     },
   },
   en: {
@@ -64,6 +65,7 @@ const resources = {
       ready: "READY",
       specs:
         "SPECS: {{width}} × {{height}} · {{format}} · {{source}} · FX: {{effects}}",
+      errorExternalSizeExceeded: "External images support a maximum size of 5000×5000",
     },
   },
 };

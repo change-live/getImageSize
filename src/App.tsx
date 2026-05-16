@@ -127,6 +127,10 @@ export default function App() {
 
   const isReady = width != null && height != null && format != null;
   const supportsExternalSource = format === "jpg" || format === "webp";
+  const isExternalSizeExceeded =
+    supportsExternalSource &&
+    imageSource === "external" &&
+    ((width !== null && width > 5000) || (height !== null && height > 5000));
   const previewStageStyle: CSSProperties | undefined =
     width != null && height != null
       ? { aspectRatio: `${width} / ${height}` }
@@ -330,7 +334,7 @@ export default function App() {
         label={t("generate")}
         icon="pi pi-sync"
         onClick={handleGenerate}
-        disabled={!isReady}
+        disabled={!isReady || isExternalSizeExceeded}
         aria-label={t("generate")}
         size="small"
         raised
@@ -340,7 +344,7 @@ export default function App() {
         icon="pi pi-download"
         severity="secondary"
         onClick={handleDownload}
-        disabled={!previewUrl || isExternalLoading}
+        disabled={!previewUrl || isExternalLoading || isExternalSizeExceeded}
         aria-label={t("download")}
         size="small"
         outlined
@@ -371,7 +375,18 @@ export default function App() {
 
   // ── Card content ───────────────────────────────────
 
-  const cardContent = previewUrl ? (
+  const cardContent = isExternalSizeExceeded ? (
+    <div className="preview-placeholder" role="alert" aria-label={t("errorExternalSizeExceeded")}>
+      <i
+        className="pi pi-exclamation-triangle text-4xl mb-3"
+        style={{ color: "var(--red-500)" }}
+        aria-hidden="true"
+      />
+      <span style={{ color: "var(--red-500)", fontWeight: "bold" }}>
+        {t("errorExternalSizeExceeded")}
+      </span>
+    </div>
+  ) : previewUrl ? (
     <div className="preview-stage" style={previewStageStyle}>
       {isExternalLoading ? (
         <div
