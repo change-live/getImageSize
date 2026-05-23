@@ -189,7 +189,8 @@ export function ImageToolbar() {
         placeholder={t("width")}
         aria-label={t("width")}
         className="toolbar-field toolbar-field-number"
-        inputStyle={{ width: "88px" }}
+        style={{ width: "260px" }}
+        inputStyle={{ width: "100%" }}
       />
 
       <InputNumber
@@ -202,7 +203,8 @@ export function ImageToolbar() {
         placeholder={t("height")}
         aria-label={t("height")}
         className="toolbar-field toolbar-field-number"
-        inputStyle={{ width: "88px" }}
+        style={{ width: "260px" }}
+        inputStyle={{ width: "100%" }}
       />
 
       <Dropdown
@@ -221,7 +223,7 @@ export function ImageToolbar() {
         placeholder={t("format")}
         ariaLabel={t("format")}
         className="toolbar-field toolbar-field-format"
-        style={{ width: "190px" }}
+        style={{ width: "260px" }}
       />
 
       {supportsExternalSource && (
@@ -253,7 +255,7 @@ export function ImageToolbar() {
             placeholder={t("grayscale")}
             ariaLabel={t("grayscale")}
             className="toolbar-field toolbar-field-advanced"
-            style={{ width: "220px" }}
+            style={{ width: "260px" }}
           />
 
           {imageSource === "picsum" && (
@@ -265,7 +267,7 @@ export function ImageToolbar() {
               placeholder={t("blur")}
               ariaLabel={t("blur")}
               className="toolbar-field toolbar-field-advanced"
-              style={{ width: "220px" }}
+              style={{ width: "260px" }}
             />
           )}
         </>

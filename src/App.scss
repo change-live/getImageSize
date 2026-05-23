@@ -174,26 +174,14 @@
   .toolbar-cluster > .p-button {
     width: 100% !important;
     min-width: 0 !important;
+    flex: none !important;
   }
-
-  .toolbar-field-format {
-    flex: 1 1 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-  }
-
-
 
   .toolbar-tools > .p-button.p-button-icon-only {
     width: 2.5rem;
     min-width: 2.5rem;
     height: 2.5rem;
     flex: 0 0 auto;
-  }
-
-  .toolbar-field-format {
-    min-width: 0;
   }
 }
 
