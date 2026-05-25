@@ -31,11 +31,14 @@ interface ImageState {
   previewUrl: string | null;
   isExternalLoading: boolean;
   generatedConfig: GeneratedConfig | null;
+  photographerName: string | null;
+  photographerUrl: string | null;
 
   setExternalSeed: (seed: string | null) => void;
   setPreviewUrl: (url: string | null) => void;
   setIsExternalLoading: (loading: boolean) => void;
   setGeneratedConfig: (config: GeneratedConfig | null) => void;
+  setPhotographer: (name: string | null, url: string | null) => void;
 }
 
 export const useImageStore = create<ImageState>()((set) => ({
@@ -57,9 +60,12 @@ export const useImageStore = create<ImageState>()((set) => ({
   previewUrl: null,
   isExternalLoading: false,
   generatedConfig: null,
+  photographerName: null,
+  photographerUrl: null,
 
   setExternalSeed: (externalSeed) => set({ externalSeed }),
   setPreviewUrl: (previewUrl) => set({ previewUrl }),
   setIsExternalLoading: (isExternalLoading) => set({ isExternalLoading }),
   setGeneratedConfig: (generatedConfig) => set({ generatedConfig }),
+  setPhotographer: (photographerName, photographerUrl) => set({ photographerName, photographerUrl }),
 }));

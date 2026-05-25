@@ -17,6 +17,8 @@ export function PreviewCard() {
     isExternalLoading,
     setIsExternalLoading,
     generatedConfig,
+    photographerName,
+    photographerUrl,
   } = useImageStore();
 
   const supportsExternalSource = format === "jpg" || format === "webp";
@@ -141,6 +143,29 @@ export function PreviewCard() {
           onLoad={() => setIsExternalLoading(false)}
           onError={() => setIsExternalLoading(false)}
         />
+      )}
+
+      {photographerName && photographerUrl && (
+        <div className="preview-attribution">
+          Photo by{" "}
+          <a
+            href={`${photographerUrl}?utm_source=getImageSize&utm_medium=referral`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="attribution-link"
+          >
+            {photographerName}
+          </a>{" "}
+          on{" "}
+          <a
+            href="https://unsplash.com/?utm_source=getImageSize&utm_medium=referral"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="attribution-link"
+          >
+            Unsplash
+          </a>
+        </div>
       )}
     </div>
   ) : (

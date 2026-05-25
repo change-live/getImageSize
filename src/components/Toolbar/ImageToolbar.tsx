@@ -62,6 +62,7 @@ export function ImageToolbar() {
     isExternalLoading,
     setIsExternalLoading,
     setGeneratedConfig,
+    setPhotographer,
   } = useImageStore();
 
   useEffect(() => {
@@ -127,6 +128,7 @@ export function ImageToolbar() {
       if (!UNSPLASH_ACCESS_KEY) {
         setPreviewUrl("error-unsplash-key-missing");
         setIsExternalLoading(false);
+        setPhotographer(null, null);
         setGeneratedConfig({
           width,
           height,
@@ -154,6 +156,7 @@ export function ImageToolbar() {
           const rawUrl = data.urls.raw;
           const downloadLocation = data.links.download_location;
           setExternalSeed(downloadLocation);
+          setPhotographer(data.user.name, data.user.links.html);
 
           const params = new URLSearchParams();
           params.set("w", String(width));
@@ -172,6 +175,7 @@ export function ImageToolbar() {
         .catch((err) => {
           console.error(err);
           setPreviewUrl("error-unsplash-failed");
+          setPhotographer(null, null);
           setIsExternalLoading(false);
         });
 
@@ -186,6 +190,7 @@ export function ImageToolbar() {
       return;
     }
 
+    setPhotographer(null, null);
     let url: string;
 
     if (supportsExternalSource && isExternal) {
