@@ -381,40 +381,6 @@ body {
   }
 }
 
-// Override PrimeReact Menu overlay for scrolling and premium aesthetics
-.p-menu {
-  position: fixed !important;
-  max-height: calc(100vh - 110px) !important;
-  overflow-y: auto !important;
-  width: auto !important;
-  min-width: 260px !important;
-  max-width: calc(100vw - 20px) !important;
-
-  .p-menuitem-link {
-    white-space: nowrap !important;
-  }
-
-  // Custom scrollbar
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: var(--surface-border);
-    border-radius: 3px;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: var(--text-color-secondary);
-  }
-
-  // Mobile optimization
-  @media (max-width: 768px) {
-    max-height: calc(100vh - 120px) !important;
-  }
-}
-
 // Theme Dialog Grid styling
 .theme-dialog {
   .p-dialog-content {
