@@ -37,6 +37,7 @@ jobs:
       - name: Build
         env:
           VITE_BASE_PATH: /
+          VITE_UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
         run: pnpm build
 
       - name: Upload artifact

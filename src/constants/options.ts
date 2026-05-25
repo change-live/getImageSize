@@ -14,6 +14,7 @@ export const IMAGE_SOURCE_OPTIONS = [
   { labelKey: "imageSourceGeometry", value: "geometry" },
   { labelKey: "imageSourcePicsum", value: "picsum" },
   { labelKey: "imageSourceLoremFlickr", value: "loremflickr" },
+  { labelKey: "imageSourceUnsplash", value: "unsplash" },
 ];
 
 export const THEME_OPTIONS = [

@@ -20,7 +20,10 @@ export function PreviewCard() {
   } = useImageStore();
 
   const supportsExternalSource = format === "jpg" || format === "webp";
-  const isExternal = imageSource === "picsum" || imageSource === "loremflickr";
+  const isExternal =
+    imageSource === "picsum" ||
+    imageSource === "loremflickr" ||
+    imageSource === "unsplash";
   const isExternalSizeExceeded =
     supportsExternalSource &&
     isExternal &&
@@ -38,7 +41,9 @@ export function PreviewCard() {
         ? t("imageSourcePicsum")
         : generatedConfig.imageSource === "loremflickr"
           ? t("imageSourceLoremFlickr")
-          : t("imageSourceGeometry");
+          : generatedConfig.imageSource === "unsplash"
+            ? t("imageSourceUnsplash")
+            : t("imageSourceGeometry");
 
     const effects: string[] = [];
     if (generatedConfig.useGrayscale) effects.push("grayscale");
@@ -67,6 +72,42 @@ export function PreviewCard() {
       />
       <span style={{ color: "var(--red-500)", fontWeight: "bold" }}>
         {t("errorExternalSizeExceeded")}
+      </span>
+    </div>
+  ) : previewUrl === "error-unsplash-key-missing" ? (
+    <div
+      className="preview-placeholder"
+      role="alert"
+      style={{ padding: "2rem", textAlign: "center" }}
+    >
+      <i
+        className="pi pi-key text-4xl mb-3"
+        style={{ color: "var(--orange-500)" }}
+        aria-hidden="true"
+      />
+      <span style={{ color: "var(--orange-500)", fontWeight: "bold", display: "block", marginBottom: "0.5rem" }}>
+        {t("imageSourceUnsplash")}
+      </span>
+      <span style={{ fontSize: "0.875rem", color: "var(--text-color-secondary)", lineHeight: "1.5" }}>
+        {t("errorUnsplashKeyMissing")}
+      </span>
+    </div>
+  ) : previewUrl === "error-unsplash-failed" ? (
+    <div
+      className="preview-placeholder"
+      role="alert"
+      style={{ padding: "2rem", textAlign: "center" }}
+    >
+      <i
+        className="pi pi-exclamation-circle text-4xl mb-3"
+        style={{ color: "var(--red-500)" }}
+        aria-hidden="true"
+      />
+      <span style={{ color: "var(--red-500)", fontWeight: "bold", display: "block", marginBottom: "0.5rem" }}>
+        {t("imageSourceUnsplash")}
+      </span>
+      <span style={{ fontSize: "0.875rem", color: "var(--text-color-secondary)", lineHeight: "1.5" }}>
+        {t("errorUnsplashFailed")}
       </span>
     </div>
   ) : previewUrl ? (

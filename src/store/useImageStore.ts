@@ -4,7 +4,7 @@ export interface GeneratedConfig {
   width: number;
   height: number;
   format: string;
-  imageSource: "geometry" | "picsum" | "loremflickr";
+  imageSource: "geometry" | "picsum" | "loremflickr" | "unsplash";
   useGrayscale: boolean;
   blurAmount: number;
 }
@@ -14,7 +14,7 @@ interface ImageState {
   width: number | null;
   height: number | null;
   format: string | null;
-  imageSource: "geometry" | "picsum" | "loremflickr";
+  imageSource: "geometry" | "picsum" | "loremflickr" | "unsplash";
   useGrayscale: boolean;
   blurAmount: number;
 
@@ -22,7 +22,7 @@ interface ImageState {
   setWidth: (w: number | null) => void;
   setHeight: (h: number | null) => void;
   setFormat: (fmt: string | null) => void;
-  setImageSource: (src: "geometry" | "picsum" | "loremflickr") => void;
+  setImageSource: (src: "geometry" | "picsum" | "loremflickr" | "unsplash") => void;
   setUseGrayscale: (g: boolean) => void;
   setBlurAmount: (b: number) => void;
 

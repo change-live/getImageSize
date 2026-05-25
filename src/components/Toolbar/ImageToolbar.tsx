@@ -83,7 +83,10 @@ export function ImageToolbar() {
 
   const isReady = width != null && height != null && format != null;
   const supportsExternalSource = format === "jpg" || format === "webp";
-  const isExternal = imageSource === "picsum" || imageSource === "loremflickr";
+  const isExternal =
+    imageSource === "picsum" ||
+    imageSource === "loremflickr" ||
+    imageSource === "unsplash";
   const isExternalSizeExceeded =
     supportsExternalSource &&
     isExternal &&
@@ -118,6 +121,65 @@ export function ImageToolbar() {
 
   const handleGenerate = () => {
     if (!isReady || width === null || height === null) return;
+    const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
+
+    if (supportsExternalSource && imageSource === "unsplash") {
+      if (!UNSPLASH_ACCESS_KEY) {
+        setPreviewUrl("error-unsplash-key-missing");
+        setIsExternalLoading(false);
+        setGeneratedConfig({
+          width,
+          height,
+          format: format!,
+          imageSource: "unsplash",
+          useGrayscale,
+          blurAmount,
+        });
+        return;
+      }
+
+      setIsExternalLoading(true);
+      const nextSeed = `${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
+      setExternalSeed(nextSeed);
+
+      fetch(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_ACCESS_KEY}`)
+        .then((res) => {
+          if (!res.ok) throw new Error(`Unsplash API error: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          const rawUrl = data.urls.raw;
+          const params = new URLSearchParams();
+          params.set("w", String(width));
+          params.set("h", String(height));
+          params.set("fit", "crop");
+          params.set("fm", format === "webp" ? "webp" : "jpg");
+          if (useGrayscale) {
+            params.set("sat", "-100");
+          }
+          if (blurAmount > 0) {
+            params.set("blur", String(blurAmount * 15));
+          }
+          const finalUrl = `${rawUrl}&${params.toString()}`;
+          setPreviewUrl(finalUrl);
+        })
+        .catch((err) => {
+          console.error(err);
+          setPreviewUrl("error-unsplash-failed");
+          setIsExternalLoading(false);
+        });
+
+      setGeneratedConfig({
+        width,
+        height,
+        format: format!,
+        imageSource: "unsplash",
+        useGrayscale,
+        blurAmount,
+      });
+      return;
+    }
+
     let url: string;
 
     if (supportsExternalSource && isExternal) {
@@ -159,7 +221,7 @@ export function ImageToolbar() {
         isExternal && supportsExternalSource ? imageSource : "geometry",
       useGrayscale: supportsExternalSource && isExternal ? useGrayscale : false,
       blurAmount:
-        supportsExternalSource && imageSource === "picsum" ? blurAmount : 0,
+        supportsExternalSource && (imageSource === "picsum" || imageSource === "unsplash") ? blurAmount : 0,
     });
   };
 
@@ -293,9 +355,9 @@ export function ImageToolbar() {
           value={imageSource}
           options={imageSourceOptions}
           onChange={(e) => {
-            const nextSource = e.value as "geometry" | "picsum" | "loremflickr";
+            const nextSource = e.value as "geometry" | "picsum" | "loremflickr" | "unsplash";
             setImageSource(nextSource);
-            if (!["picsum", "loremflickr"].includes(nextSource)) {
+            if (!["picsum", "loremflickr", "unsplash"].includes(nextSource)) {
               setIsExternalLoading(false);
             }
           }}
@@ -319,7 +381,7 @@ export function ImageToolbar() {
             style={{ width: "260px" }}
           />
 
-          {imageSource === "picsum" && (
+          {(imageSource === "picsum" || imageSource === "unsplash") && (
             <Dropdown
               inputId="input-blur"
               value={blurAmount}
