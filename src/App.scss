@@ -34,7 +34,12 @@
   outline-offset: 2px;
 }
 
-// 讓 #root 撐滿整個 viewport（不用 reset css）
+body {
+  margin: 0;
+  padding: 0;
+}
+
+// 讓 #root 撐滿整個 viewport
 #root {
   min-height: 100vh;
   display: flex;
@@ -407,5 +412,99 @@
   // Mobile optimization
   @media (max-width: 768px) {
     max-height: calc(100vh - 120px) !important;
+  }
+}
+
+// Theme Dialog Grid styling
+.theme-dialog {
+  .p-dialog-content {
+    padding: 1.5rem !important;
+    max-height: 70vh;
+    overflow-y: auto;
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--surface-border);
+      border-radius: 3px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--text-color-secondary);
+    }
+  }
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.theme-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-card);
+  color: var(--text-color);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  font-size: 0.85rem;
+  font-weight: 500;
+  width: 100%;
+  font-family: inherit;
+  outline: none;
+
+  &:hover {
+    border-color: var(--primary-color);
+    background: var(--surface-hover);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--primary-color);
+  }
+
+  &.selected {
+    border-color: var(--primary-color);
+    background: rgba(14, 165, 233, 0.08);
+    color: var(--primary-color);
+    font-weight: 600;
+    box-shadow: 0 0 0 2px var(--primary-color);
+  }
+
+  .theme-card-icon {
+    font-size: 1rem;
+    color: var(--text-color-secondary);
+  }
+
+  &.selected .theme-card-icon {
+    color: var(--primary-color);
+  }
+
+  .theme-card-check {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--surface-card);
+    border-radius: 50%;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    z-index: 2;
+  }
+}
+
+[data-theme="dark"] {
+  .theme-card.selected {
+    background: rgba(14, 165, 233, 0.15);
   }
 }

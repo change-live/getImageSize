@@ -6,6 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Toolbar } from "primereact/toolbar";
 import { Menu } from "primereact/menu";
+import { Dialog } from "primereact/dialog";
 import {
   FORMAT_OPTIONS,
   IMAGE_SOURCE_OPTIONS,
@@ -25,10 +26,10 @@ export function ImageToolbar() {
   const { t, i18n } = useTranslation();
   const { isDark, toggleTheme, themeName, setThemeName } = useTheme();
   const downloadRef = useRef<HTMLAnchorElement>(null);
-  const themeMenuRef = useRef<Menu>(null);
   const languageMenuRef = useRef<Menu>(null);
 
   const [isMobile, setIsMobile] = useState(false);
+  const [themeDialogVisible, setThemeDialogVisible] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -71,9 +72,6 @@ export function ImageToolbar() {
       // Ignore scrolling inside the menu itself or any of its sub-containers
       if (target && target.closest && target.closest(".p-menu")) return;
       
-      if (themeMenuRef.current) {
-        (themeMenuRef.current as any).hide(e);
-      }
       if (languageMenuRef.current) {
         (languageMenuRef.current as any).hide(e);
       }
@@ -106,12 +104,6 @@ export function ImageToolbar() {
   const blurOptions = Array.from({ length: 11 }, (_, n) => ({
     label: n === 0 ? t("blurNoneLabel") : t("blurLevelLabel", { level: n }),
     value: n,
-  }));
-
-  const themeMenuItems = THEME_OPTIONS.map((opt) => ({
-    label: opt.label,
-    icon: themeName === opt.value ? "pi pi-check" : "pi pi-fw",
-    command: () => setThemeName(opt.value),
   }));
 
   const languageMenuItems = LANGUAGES.map((opt) => ({
@@ -446,16 +438,13 @@ export function ImageToolbar() {
         outlined
       />
       <div className="toolbar-tools">
-        <Menu model={themeMenuItems} popup ref={themeMenuRef} id="theme_menu" />
         <Button
           icon="pi pi-palette"
           severity="secondary"
           text
           size="small"
           rounded
-          onClick={(e) => themeMenuRef.current?.toggle(e)}
-          aria-controls="theme_menu"
-          aria-haspopup
+          onClick={() => setThemeDialogVisible(true)}
           aria-label={t("theme")}
           tooltip={t("theme")}
           tooltipOptions={{ position: "bottom" }}
@@ -500,6 +489,37 @@ export function ImageToolbar() {
     <>
       <Toolbar start={toolbarStart} end={toolbarEnd} className="app-toolbar" />
       <a ref={downloadRef} style={{ display: "none" }} aria-hidden />
+
+      <Dialog
+        header={t("theme")}
+        visible={themeDialogVisible}
+        style={{ width: "90vw", maxWidth: "600px" }}
+        onHide={() => setThemeDialogVisible(false)}
+        draggable={false}
+        resizable={false}
+        dismissableMask
+        className="theme-dialog"
+      >
+        <div className="theme-grid">
+          {THEME_OPTIONS.map((opt) => {
+            const isSelected = themeName === opt.value;
+            return (
+              <button
+                key={opt.value}
+                className={`theme-card ${isSelected ? "selected" : ""}`}
+                onClick={() => {
+                  setThemeName(opt.value);
+                  setThemeDialogVisible(false);
+                }}
+              >
+                <span className="theme-card-icon pi pi-palette" />
+                <span className="theme-card-label">{opt.label}</span>
+                {isSelected && <span className="theme-card-check pi pi-check-circle" />}
+              </button>
+            );
+          })}
+        </div>
+      </Dialog>
     </>
   );
 }
