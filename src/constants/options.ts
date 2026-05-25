@@ -22,5 +22,12 @@ export const THEME_OPTIONS = [
   { label: "Lara Indigo", value: "lara-indigo" },
   { label: "Lara Green", value: "lara-green" },
   { label: "Lara Blue", value: "lara-blue" },
+  { label: "Lara Purple", value: "lara-purple" },
+  { label: "Lara Teal", value: "lara-teal" },
+  { label: "Lara Pink", value: "lara-pink" },
+  { label: "Lara Amber", value: "lara-amber" },
   { label: "MD Indigo", value: "md-indigo" },
+  { label: "MD Deep Purple", value: "md-deeppurple" },
+  { label: "Soho", value: "soho" },
+  { label: "Viva", value: "viva" },
 ];

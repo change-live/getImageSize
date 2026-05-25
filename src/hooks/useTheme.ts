@@ -19,9 +19,37 @@ const THEMES: Record<string, { light: () => Promise<{ default: string }>; dark: 
     light: () => import("primereact/resources/themes/lara-light-blue/theme.css?url"),
     dark: () => import("primereact/resources/themes/lara-dark-blue/theme.css?url"),
   },
+  "lara-purple": {
+    light: () => import("primereact/resources/themes/lara-light-purple/theme.css?url"),
+    dark: () => import("primereact/resources/themes/lara-dark-purple/theme.css?url"),
+  },
+  "lara-teal": {
+    light: () => import("primereact/resources/themes/lara-light-teal/theme.css?url"),
+    dark: () => import("primereact/resources/themes/lara-dark-teal/theme.css?url"),
+  },
+  "lara-pink": {
+    light: () => import("primereact/resources/themes/lara-light-pink/theme.css?url"),
+    dark: () => import("primereact/resources/themes/lara-dark-pink/theme.css?url"),
+  },
+  "lara-amber": {
+    light: () => import("primereact/resources/themes/lara-light-amber/theme.css?url"),
+    dark: () => import("primereact/resources/themes/lara-dark-amber/theme.css?url"),
+  },
   "md-indigo": {
     light: () => import("primereact/resources/themes/md-light-indigo/theme.css?url"),
     dark: () => import("primereact/resources/themes/md-dark-indigo/theme.css?url"),
+  },
+  "md-deeppurple": {
+    light: () => import("primereact/resources/themes/md-light-deeppurple/theme.css?url"),
+    dark: () => import("primereact/resources/themes/md-dark-deeppurple/theme.css?url"),
+  },
+  "soho": {
+    light: () => import("primereact/resources/themes/soho-light/theme.css?url"),
+    dark: () => import("primereact/resources/themes/soho-dark/theme.css?url"),
+  },
+  "viva": {
+    light: () => import("primereact/resources/themes/viva-light/theme.css?url"),
+    dark: () => import("primereact/resources/themes/viva-dark/theme.css?url"),
   },
 };
 
