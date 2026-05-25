@@ -378,8 +378,16 @@
 
 // Override PrimeReact Menu overlay for scrolling and premium aesthetics
 .p-menu {
-  max-height: min(1000px, 88vh) !important;
+  position: fixed !important;
+  max-height: calc(100vh - 110px) !important;
   overflow-y: auto !important;
+  width: auto !important;
+  min-width: 260px !important;
+  max-width: calc(100vw - 20px) !important;
+
+  .p-menuitem-link {
+    white-space: nowrap !important;
+  }
 
   // Custom scrollbar
   &::-webkit-scrollbar {
@@ -398,6 +406,6 @@
 
   // Mobile optimization
   @media (max-width: 768px) {
-    max-height: min(400px, 70vh) !important;
+    max-height: calc(100vh - 120px) !important;
   }
 }
