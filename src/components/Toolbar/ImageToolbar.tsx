@@ -1,7 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
+import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Toolbar } from "primereact/toolbar";
 import { Menu } from "primereact/menu";
@@ -26,6 +27,20 @@ export function ImageToolbar() {
   const downloadRef = useRef<HTMLAnchorElement>(null);
   const themeMenuRef = useRef<Menu>(null);
   const languageMenuRef = useRef<Menu>(null);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth <= 768 ||
+        window.matchMedia("(pointer: coarse)").matches
+      );
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const {
     width,
@@ -179,33 +194,79 @@ export function ImageToolbar() {
 
   const toolbarStart = (
     <div className="toolbar-cluster toolbar-cluster-start">
-      <InputNumber
-        inputId="input-width"
-        value={width}
-        onValueChange={(e) => setWidth(e.value ?? null)}
-        showButtons
-        step={50}
-        min={10}
-        placeholder={t("width")}
-        aria-label={t("width")}
-        className="toolbar-field toolbar-field-number"
-        style={{ width: "260px" }}
-        inputStyle={{ width: "100%" }}
-      />
+      {isMobile ? (
+        <InputText
+          id="input-width"
+          type="number"
+          value={width === null ? "" : String(width)}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === "") {
+              setWidth(null);
+            } else {
+              const parsed = parseInt(val, 10);
+              setWidth(isNaN(parsed) ? null : parsed);
+            }
+          }}
+          step={50}
+          min={10}
+          placeholder={t("width")}
+          aria-label={t("width")}
+          className="toolbar-field toolbar-field-number"
+          style={{ width: "260px" }}
+        />
+      ) : (
+        <InputNumber
+          inputId="input-width"
+          value={width}
+          onValueChange={(e) => setWidth(e.value ?? null)}
+          showButtons
+          step={50}
+          min={10}
+          placeholder={t("width")}
+          aria-label={t("width")}
+          className="toolbar-field toolbar-field-number"
+          style={{ width: "260px" }}
+          inputStyle={{ width: "100%" }}
+        />
+      )}
 
-      <InputNumber
-        inputId="input-height"
-        value={height}
-        onValueChange={(e) => setHeight(e.value ?? null)}
-        showButtons
-        step={50}
-        min={10}
-        placeholder={t("height")}
-        aria-label={t("height")}
-        className="toolbar-field toolbar-field-number"
-        style={{ width: "260px" }}
-        inputStyle={{ width: "100%" }}
-      />
+      {isMobile ? (
+        <InputText
+          id="input-height"
+          type="number"
+          value={height === null ? "" : String(height)}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === "") {
+              setHeight(null);
+            } else {
+              const parsed = parseInt(val, 10);
+              setHeight(isNaN(parsed) ? null : parsed);
+            }
+          }}
+          step={50}
+          min={10}
+          placeholder={t("height")}
+          aria-label={t("height")}
+          className="toolbar-field toolbar-field-number"
+          style={{ width: "260px" }}
+        />
+      ) : (
+        <InputNumber
+          inputId="input-height"
+          value={height}
+          onValueChange={(e) => setHeight(e.value ?? null)}
+          showButtons
+          step={50}
+          min={10}
+          placeholder={t("height")}
+          aria-label={t("height")}
+          className="toolbar-field toolbar-field-number"
+          style={{ width: "260px" }}
+          inputStyle={{ width: "100%" }}
+        />
+      )}
 
       <Dropdown
         inputId="input-format"
