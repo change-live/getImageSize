@@ -139,16 +139,22 @@ export function ImageToolbar() {
       }
 
       setIsExternalLoading(true);
-      const nextSeed = `${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
-      setExternalSeed(nextSeed);
 
-      fetch(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_ACCESS_KEY}`)
+      fetch(`https://api.unsplash.com/photos/random`, {
+        headers: {
+          "Authorization": `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+          "Accept-Version": "v1",
+        },
+      })
         .then((res) => {
           if (!res.ok) throw new Error(`Unsplash API error: ${res.status}`);
           return res.json();
         })
         .then((data) => {
           const rawUrl = data.urls.raw;
+          const downloadLocation = data.links.download_location;
+          setExternalSeed(downloadLocation);
+
           const params = new URLSearchParams();
           params.set("w", String(width));
           params.set("h", String(height));
@@ -232,6 +238,20 @@ export function ImageToolbar() {
     const fileName = `img_${width}x${height}.${format}`;
 
     if (supportsExternalSource && isExternal && externalSeed !== null) {
+      if (imageSource === "unsplash") {
+        try {
+          const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
+          await fetch(externalSeed, {
+            headers: {
+              "Authorization": `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+              "Accept-Version": "v1",
+            },
+          });
+        } catch (err) {
+          console.error("Failed to track Unsplash download:", err);
+        }
+      }
+
       try {
         const response = await fetch(previewUrl);
         if (!response.ok)
