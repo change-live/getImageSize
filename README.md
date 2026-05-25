@@ -9,16 +9,19 @@
   - **多格式輸出**：支援 SVG、PNG、JPG、WebP 格式，一鍵快速下載。
 - **🖼️ 圖片來源切換**
   - **幾何圖片 (Geometry)**：純色極簡的佔位圖片。
-  - **外部圖庫 (Picsum / LoremFlickr)**：動態載入真實的攝影照片（僅支援 JPG / WebP）。
+  - **外部圖庫 (Picsum / LoremFlickr / Unsplash)**：動態載入真實的攝影照片（僅支援 JPG / WebP）。
+  - **Unsplash 官方規範合規**：完整實作官方要求的下載追蹤（Download Location Trigger），並為攝影師提供高質感的磨砂玻璃微透名片標籤與版權屬名連結。
 - **🪄 視覺特效 (FX)**
   - **灰階 (Grayscale)**：支援一鍵將照片轉換為黑白。
   - **模糊 (Blur)**：提供 0~10 級的模糊效果調整。
 - **⚙️ 現代化 UI 與體驗**
-  - **動態主題切換**：內建 5 款 PrimeReact 主題（Lara Cyan, Indigo, Green, Blue, MD Indigo）。
+  - **動態主題切換**：內建 **56 款** PrimeReact 全套經典與精品主題，涵蓋 Lara 現代版、Material Design、Bootstrap 4、經典 Saga & Vela 以及 Arya 純黑系列。
+  - **智慧亮暗色配對 (Smart Style Pairing)**：為每一款主題進行專屬亮/暗色調對稱配對，在單色主題（如 Tailwind、Fluent）下提供智慧 fallback，確保亮暗色切換體驗順暢。
+  - **精美對話框主題選單 (Theme Dialog Modal)**：淘汰舊版下拉選單，全面改用精美的毛玻璃彈出對話框及卡片網格佈局（Theme Grid Card Layout），選中狀態高亮並帶有精美勾選圈圈。
   - **深色模式 (Dark Mode)**：自由切換淺色與深色外觀。
   - **多語系支援**：內建繁體中文與 English。
   - **偏好記憶 (Persistence)**：您的主題、深色模式與語言偏好將自動儲存於瀏覽器 `localStorage`，下次造訪無需重新設定。
-  - **完美 RWD**：為手機與小螢幕最佳化的圖示彈出選單 (Icon Popup Menu) 設計，操作不擁擠。
+  - **完美 RWD**：網頁使用 Flexbox 高彈性滿版佈局，桌面版 100% 貼合視窗（無任何多餘網頁捲軸），手機版（<480px）工具列自動垂直堆疊，且對話框自動切換為雙欄網格卡片，便於大拇指單手操作。
 
 ## 🛠️ 技術棧
 
@@ -63,6 +66,28 @@
    ```bash
    pnpm preview
    ```
+
+## 🔑 Unsplash API 金鑰設定 (API Key Setup)
+
+為使「外部圖片 (Unsplash)」來源能正常連線載入並合規下載，需要設定 Unsplash API Access Key：
+
+### 1. 本地開發設定
+在專案根目錄下建立 `.env.local` 檔案（此檔案已被 `.gitignore` 排除，保證金鑰不外洩），並填入：
+```env
+VITE_UNSPLASH_ACCESS_KEY=你的_UNSPLASH_ACCESS_KEY
+```
+
+### 2. GitHub Pages 生產環境部署設定
+為使線上網頁自動擁有金鑰，請依據以下步驟設定：
+1. 進入您 GitHub Repository 頂部的 **Settings**。
+2. 點選左側選單中的 **Secrets and variables** → **Actions**。
+3. 點選右側綠色按鈕 **New repository secret**。
+4. 填入以下資料：
+   - **Name**: `UNSPLASH_ACCESS_KEY`
+   - **Value**: `你的_UNSPLASH_ACCESS_KEY` *(請特別注意大小寫，若大小寫錯誤會導致 Unsplash 載入時發生 401 錯誤)*
+5. 設定完成後，每當您推送程式碼至 `main` 分支，GitHub Actions 會在 Build 階段自動將此金鑰編譯注入到線上靜態資源中！
+
+---
 
 ## 📦 部署到 GitHub Pages
 
