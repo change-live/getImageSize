@@ -68,8 +68,8 @@ export function ImageToolbar() {
   useEffect(() => {
     const handleScroll = (e: Event) => {
       const target = e.target as HTMLElement;
-      // Ignore scrolling inside the menu itself
-      if (target && target.classList && target.classList.contains("p-menu-list")) return;
+      // Ignore scrolling inside the menu itself or any of its sub-containers
+      if (target && target.closest && target.closest(".p-menu")) return;
       
       if (themeMenuRef.current) {
         (themeMenuRef.current as any).hide(e);
