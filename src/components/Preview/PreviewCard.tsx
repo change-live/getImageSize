@@ -125,16 +125,18 @@ export function PreviewCard() {
           <span>{t("loadingImage")}</span>
         </div>
       ) : (
-        <img
-          src={previewUrl}
-          alt={specsText ?? ""}
-          className="preview-image"
-          onLoad={() => setIsExternalLoading(false)}
-          onError={() => setIsExternalLoading(false)}
-        />
+        previewUrl !== "loading" && (
+          <img
+            src={previewUrl}
+            alt={specsText ?? ""}
+            className="preview-image"
+            onLoad={() => setIsExternalLoading(false)}
+            onError={() => setIsExternalLoading(false)}
+          />
+        )
       )}
 
-      {isExternalLoading && (
+      {isExternalLoading && previewUrl !== "loading" && (
         <img
           src={previewUrl}
           alt=""

@@ -141,6 +141,7 @@ export function ImageToolbar() {
       }
 
       setIsExternalLoading(true);
+      setPreviewUrl("loading");
 
       fetch(`https://api.unsplash.com/photos/random`, {
         headers: {
