@@ -375,3 +375,24 @@
     }
   }
 }
+
+// Override PrimeReact Menu overlay for scrolling and premium aesthetics
+.p-menu {
+  max-height: min(450px, 75vh) !important;
+  overflow-y: auto !important;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--surface-border);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--text-color-secondary);
+  }
+}
