@@ -40,14 +40,16 @@
 本專案使用 `pnpm` 作為套件管理工具，並透過 Vite 進行極速建置。
 
 ### 環境要求
-- Node.js >= 20
-- pnpm >= 8
+- Node.js >= 22 (LTS)
+- pnpm >= 11
 
 ### 啟動步驟
 1. **安裝依賴套件**
+   由於 pnpm v11 具有預設的供應鏈安全審核政策（Minimum Release Age 與 Ignored Builds），安裝時請執行：
    ```bash
    pnpm install
    ```
+   *備註：若遇到被忽略的構建腳本警告（如 `@parcel/watcher`），本專案已在 `pnpm-workspace.yaml` 中配置好白名單放行（allowBuilds），以保證安裝能一次通過且安全無虞。*
 
 2. **啟動本地開發伺服器**
    專案已於 `vite.config.ts` 中指定在 `http://localhost:3000/` 啟動服務。
