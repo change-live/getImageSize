@@ -505,3 +505,134 @@ body {
     }
   }
 }
+
+// Mobile Collapsible Topbar Styling
+.mobile-navbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--surface-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 3.75rem;
+  padding: 0 1rem;
+}
+
+
+.mobile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .p-button {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    min-width: 2.25rem !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+}
+
+.mobile-settings-drawer {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0 1rem;
+  border-top: 1px solid transparent;
+  background: var(--surface-card);
+
+  &.expanded {
+    max-height: 85vh;
+    opacity: 1;
+    padding: 1.25rem 1rem;
+    border-top: 1px solid var(--surface-border);
+    overflow-y: auto;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+
+    // Custom scrollbar for sliding settings inside drawer
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--surface-border);
+      border-radius: 2px;
+    }
+  }
+}
+
+.mobile-settings-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-start;
+
+  .mobile-field-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    letter-spacing: 0.02em;
+  }
+
+  // Ensure full width input and dropdowns inside
+  .p-inputtext,
+  .p-dropdown {
+    width: 100% !important;
+  }
+}
+
+.mobile-settings-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+
+  .p-button {
+    padding: 0.75rem 1rem !important;
+    font-weight: 600;
+    border-radius: 0.5rem;
+  }
+}
+
+.mobile-utility-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0.85rem 0.5rem 0;
+  border-top: 1px dashed var(--surface-border);
+
+  .p-button {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    font-size: 1.15rem;
+    transition: all 0.2s ease;
+
+    &:active {
+      transform: scale(0.9);
+      background: var(--surface-hover);
+    }
+  }
+}
+

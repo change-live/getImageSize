@@ -30,13 +30,11 @@ export function ImageToolbar() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [themeDialogVisible, setThemeDialogVisible] = useState(false);
+  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(
-        window.innerWidth <= 768 ||
-        window.matchMedia("(pointer: coarse)").matches
-      );
+      setIsMobile(window.innerWidth <= 768);
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -71,7 +69,7 @@ export function ImageToolbar() {
       const target = e.target as HTMLElement;
       // Ignore scrolling inside the menu itself or any of its sub-containers
       if (target && target.closest && target.closest(".p-menu")) return;
-      
+
       if (languageMenuRef.current) {
         (languageMenuRef.current as any).hide(e);
       }
@@ -462,12 +460,6 @@ export function ImageToolbar() {
           tooltipOptions={{ position: "bottom" }}
         />
 
-        <Menu
-          model={languageMenuItems}
-          popup
-          ref={languageMenuRef}
-          id="language_menu"
-        />
         <Button
           icon="pi pi-globe"
           severity="secondary"
@@ -487,8 +479,243 @@ export function ImageToolbar() {
 
   return (
     <>
-      <Toolbar start={toolbarStart} end={toolbarEnd} className="app-toolbar" />
+      {isMobile ? (
+        <div className="mobile-navbar-container">
+          <div className="mobile-header-bar">
+            <div className="mobile-header-actions">
+              <Button
+                icon="pi pi-sync"
+                text
+                rounded
+                size="small"
+                onClick={() => {
+                  handleGenerate();
+                  setIsSettingsExpanded(false); // Collapse to immediately reveal image
+                }}
+                disabled={!isReady || isExternalSizeExceeded}
+                aria-label={t("generate")}
+                tooltip={t("generate")}
+                tooltipOptions={{ position: "bottom" }}
+              />
+              <Button
+                icon="pi pi-download"
+                severity="secondary"
+                text
+                rounded
+                size="small"
+                onClick={handleDownload}
+                disabled={!previewUrl || isExternalLoading || isExternalSizeExceeded}
+                aria-label={t("download")}
+                tooltip={t("download")}
+                tooltipOptions={{ position: "bottom" }}
+              />
+              <Button
+                icon={isSettingsExpanded ? "pi pi-times" : "pi pi-sliders-h"}
+                severity={isSettingsExpanded ? "danger" : undefined}
+                raised={!isSettingsExpanded}
+                text={isSettingsExpanded}
+                rounded
+                size="small"
+                onClick={() => setIsSettingsExpanded(!isSettingsExpanded)}
+                aria-label={isSettingsExpanded ? t("collapseSettings") : t("expandSettings")}
+                tooltip={isSettingsExpanded ? t("collapseSettings") : t("expandSettings")}
+                tooltipOptions={{ position: "bottom" }}
+              />
+            </div>
+          </div>
+          <div className={`mobile-settings-drawer ${isSettingsExpanded ? "expanded" : ""}`}>
+            <div className="mobile-settings-fields">
+              <div className="mobile-field-group">
+                <label htmlFor="mobile-input-width" className="mobile-field-label">{t("width")}</label>
+                <InputText
+                  id="mobile-input-width"
+                  type="number"
+                  value={width === null ? "" : String(width)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "") {
+                      setWidth(null);
+                    } else {
+                      const parsed = parseInt(val, 10);
+                      setWidth(isNaN(parsed) ? null : parsed);
+                    }
+                  }}
+                  step={50}
+                  min={10}
+                  placeholder={t("width")}
+                  aria-label={t("width")}
+                  className="p-inputtext p-component w-full"
+                />
+              </div>
+
+              <div className="mobile-field-group">
+                <label htmlFor="mobile-input-height" className="mobile-field-label">{t("height")}</label>
+                <InputText
+                  id="mobile-input-height"
+                  type="number"
+                  value={height === null ? "" : String(height)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "") {
+                      setHeight(null);
+                    } else {
+                      const parsed = parseInt(val, 10);
+                      setHeight(isNaN(parsed) ? null : parsed);
+                    }
+                  }}
+                  step={50}
+                  min={10}
+                  placeholder={t("height")}
+                  aria-label={t("height")}
+                  className="p-inputtext p-component w-full"
+                />
+              </div>
+
+              <div className="mobile-field-group">
+                <label htmlFor="mobile-input-format" className="mobile-field-label">{t("format")}</label>
+                <Dropdown
+                  inputId="mobile-input-format"
+                  value={format}
+                  options={FORMAT_OPTIONS}
+                  onChange={(e) => {
+                    const nextFormat = e.value as string | null;
+                    setFormat(nextFormat);
+                    if (nextFormat !== "jpg" && nextFormat !== "webp") {
+                      setImageSource("geometry");
+                      setUseGrayscale(false);
+                      setBlurAmount(0);
+                    }
+                  }}
+                  placeholder={t("format")}
+                  className="w-full"
+                />
+              </div>
+
+              {supportsExternalSource && (
+                <div className="mobile-field-group">
+                  <label htmlFor="mobile-input-image-source" className="mobile-field-label">{t("imageSource")}</label>
+                  <Dropdown
+                    inputId="mobile-input-image-source"
+                    value={imageSource}
+                    options={imageSourceOptions}
+                    onChange={(e) => {
+                      const nextSource = e.value as "geometry" | "picsum" | "loremflickr" | "unsplash";
+                      setImageSource(nextSource);
+                      if (!["picsum", "loremflickr", "unsplash"].includes(nextSource)) {
+                        setIsExternalLoading(false);
+                      }
+                    }}
+                    placeholder={t("imageSource")}
+                    className="w-full"
+                  />
+                </div>
+              )}
+
+              {supportsExternalSource && isExternal && (
+                <>
+                  <div className="mobile-field-group">
+                    <label htmlFor="mobile-input-grayscale" className="mobile-field-label">{t("grayscale")}</label>
+                    <Dropdown
+                      inputId="mobile-input-grayscale"
+                      value={useGrayscale}
+                      options={grayscaleOptions}
+                      onChange={(e) => setUseGrayscale(Boolean(e.value))}
+                      placeholder={t("grayscale")}
+                      className="w-full"
+                    />
+                  </div>
+
+                  {(imageSource === "picsum" || imageSource === "unsplash") && (
+                    <div className="mobile-field-group">
+                      <label htmlFor="mobile-input-blur" className="mobile-field-label">{t("blur")}</label>
+                      <Dropdown
+                        inputId="mobile-input-blur"
+                        value={blurAmount}
+                        options={blurOptions}
+                        onChange={(e) => setBlurAmount(e.value ?? 0)}
+                        placeholder={t("blur")}
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="mobile-settings-actions">
+              <Button
+                label={t("generate")}
+                icon="pi pi-sync"
+                onClick={() => {
+                  handleGenerate();
+                  setIsSettingsExpanded(false); // Collapse to immediately reveal image
+                }}
+                disabled={!isReady || isExternalSizeExceeded}
+                className="w-full"
+                raised
+              />
+              <Button
+                label={t("download")}
+                icon="pi pi-download"
+                severity="secondary"
+                onClick={handleDownload}
+                disabled={!previewUrl || isExternalLoading || isExternalSizeExceeded}
+                className="w-full"
+                outlined
+              />
+            </div>
+
+            <div className="mobile-utility-tools">
+              <Button
+                icon="pi pi-palette"
+                severity="secondary"
+                text
+                size="small"
+                rounded
+                onClick={() => setThemeDialogVisible(true)}
+                aria-label={t("theme")}
+                tooltip={t("theme")}
+                tooltipOptions={{ position: "bottom" }}
+              />
+
+              <Button
+                icon={isDark ? "pi pi-sun" : "pi pi-moon"}
+                severity="secondary"
+                text
+                size="small"
+                rounded
+                onClick={toggleTheme}
+                aria-label={isDark ? t("switchToLight") : t("switchToDark")}
+                tooltip={isDark ? t("switchToLight") : t("switchToDark")}
+                tooltipOptions={{ position: "bottom" }}
+              />
+
+              <Button
+                icon="pi pi-globe"
+                severity="secondary"
+                text
+                size="small"
+                rounded
+                onClick={(e) => languageMenuRef.current?.toggle(e)}
+                aria-controls="language_menu"
+                aria-haspopup
+                aria-label={t("language")}
+                tooltip={t("language")}
+                tooltipOptions={{ position: "bottom" }}
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <Toolbar start={toolbarStart} end={toolbarEnd} className="app-toolbar" />
+      )}
       <a ref={downloadRef} style={{ display: "none" }} aria-hidden />
+      <Menu
+        model={languageMenuItems}
+        popup
+        ref={languageMenuRef}
+        id="language_menu"
+      />
 
       <Dialog
         header={t("theme")}
