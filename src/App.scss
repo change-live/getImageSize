@@ -317,11 +317,11 @@ body {
       from 0deg,
       transparent 0%,
       transparent 85%,
-      rgba(56, 189, 248, 0) 87%,
-      rgba(56, 189, 248, 1) 92%,
-      rgba(129, 140, 248, 1) 96%,
-      rgba(244, 114, 182, 1) 99%,
-      rgba(244, 114, 182, 0) 100%
+      rgba(37, 99, 235, 0) 87%,
+      #2563eb 92%,
+      #6d28d9 96%,
+      #be185d 99%,
+      rgba(190, 24, 93, 0) 100%
     );
     transform: translate(-50%, -50%) rotate(0deg);
     animation: border-rotate 4s linear infinite;
@@ -374,6 +374,19 @@ body {
   [data-theme="dark"] & {
     background: rgba(255, 255, 255, 0.06);
 
+    &::before {
+      background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 85%,
+        rgba(56, 189, 248, 0) 87%,
+        rgba(56, 189, 248, 1) 92%,
+        rgba(129, 140, 248, 1) 96%,
+        rgba(244, 114, 182, 1) 99%,
+        rgba(244, 114, 182, 0) 100%
+      );
+    }
+
     &::after {
       background: rgba(30, 41, 59, 0.95);
     }
@@ -410,11 +423,11 @@ body {
       from 0deg,
       transparent 0%,
       transparent 85%,
-      rgba(56, 189, 248, 0) 87%,
-      rgba(56, 189, 248, 1) 92%,
-      rgba(129, 140, 248, 1) 96%,
-      rgba(244, 114, 182, 1) 99%,
-      rgba(244, 114, 182, 0) 100%
+      rgba(37, 99, 235, 0) 87%,
+      #2563eb 92%,
+      #6d28d9 96%,
+      #be185d 99%,
+      rgba(190, 24, 93, 0) 100%
     );
     transform: translate(-50%, -50%) rotate(0deg);
     animation: border-rotate 3.5s linear infinite; /* Snappy, active sweep */
@@ -499,6 +512,19 @@ body {
     // Dark Mode Overrides
     [data-theme="dark"] & {
       background: rgba(255, 255, 255, 0.05);
+
+      &::before {
+        background: conic-gradient(
+          from 0deg,
+          transparent 0%,
+          transparent 85%,
+          rgba(56, 189, 248, 0) 87%,
+          rgba(56, 189, 248, 1) 92%,
+          rgba(129, 140, 248, 1) 96%,
+          rgba(244, 114, 182, 1) 99%,
+          rgba(244, 114, 182, 0) 100%
+        );
+      }
 
       &::after {
         background: rgba(30, 41, 59, 0.95);
@@ -586,6 +612,19 @@ body {
     // Dark Mode Overrides
     [data-theme="dark"] & {
       background: rgba(255, 255, 255, 0.05);
+
+      &::before {
+        background: conic-gradient(
+          from 0deg,
+          transparent 0%,
+          transparent 85%,
+          rgba(56, 189, 248, 0) 87%,
+          rgba(56, 189, 248, 1) 92%,
+          rgba(129, 140, 248, 1) 96%,
+          rgba(244, 114, 182, 1) 99%,
+          rgba(244, 114, 182, 0) 100%
+        );
+      }
 
       &::after {
         background: rgba(30, 41, 59, 0.95);
