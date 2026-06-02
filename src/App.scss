@@ -287,6 +287,353 @@ body {
   display: block;
 }
 
+.status-badge-ready {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-color);
+  background: rgba(129, 140, 248, 0.08); // Base tint for static border outline
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  user-select: none;
+  cursor: default;
+
+  // The rotating comet light beam sweep
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 170%;
+    aspect-ratio: 1; /* Force perfect square so it sweeps all 4 sides evenly */
+    background: conic-gradient(
+      from 0deg,
+      transparent 0%,
+      transparent 85%,
+      rgba(56, 189, 248, 0) 87%,
+      rgba(56, 189, 248, 1) 92%,
+      rgba(129, 140, 248, 1) 96%,
+      rgba(244, 114, 182, 1) 99%,
+      rgba(244, 114, 182, 0) 100%
+    );
+    transform: translate(-50%, -50%) rotate(0deg);
+    animation: border-rotate 4s linear infinite;
+    z-index: -2;
+  }
+
+  // The inner masking color to overlay and create a neat 1.5px border
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 1.5px; /* Border thickness */
+    background: var(--surface-card); /* Matches card's theme background */
+    border-radius: calc(2rem - 1.5px);
+    z-index: -1;
+    transition: background 0.3s ease;
+  }
+
+  // Soft modern glow that coordinates with the light/dark mode
+  filter: drop-shadow(0 2px 8px rgba(129, 140, 248, 0.15));
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    transform: translateY(-1px);
+    filter: drop-shadow(0 4px 12px rgba(129, 140, 248, 0.3));
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+    &::before {
+      animation-duration: 2.2s; /* Speed up sweep on hover */
+    }
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #10b981; /* breathing emerald green */
+    box-shadow: 0 0 8px #10b981;
+    animation: status-pulse 2s infinite ease-in-out;
+  }
+
+  .status-text {
+    background: linear-gradient(135deg, var(--text-color) 40%, var(--text-color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: inherit;
+    text-transform: uppercase;
+  }
+
+  // Dark Mode
+  [data-theme="dark"] & {
+    background: rgba(255, 255, 255, 0.06);
+
+    &::after {
+      background: rgba(30, 41, 59, 0.95);
+    }
+  }
+}
+
+.specs-display-board {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 1rem;
+  background: rgba(129, 140, 248, 0.05); // Base tint for static border outline
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  // The rotating comet light beam sweep
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%; /* Cover long side perfectly */
+    aspect-ratio: 1; /* Force perfect square so it sweeps all 4 sides of the wide rectangle evenly */
+    background: conic-gradient(
+      from 0deg,
+      transparent 0%,
+      transparent 85%,
+      rgba(56, 189, 248, 0) 87%,
+      rgba(56, 189, 248, 1) 92%,
+      rgba(129, 140, 248, 1) 96%,
+      rgba(244, 114, 182, 1) 99%,
+      rgba(244, 114, 182, 0) 100%
+    );
+    transform: translate(-50%, -50%) rotate(0deg);
+    animation: border-rotate 3.5s linear infinite; /* Snappy, active sweep */
+    z-index: -2;
+  }
+
+  // The inner masking color to overlay and create a neat 1.5px border
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 1.5px; /* Border thickness */
+    background: var(--surface-card); /* Matches card's theme background */
+    border-radius: calc(1rem - 1.5px);
+    z-index: -1;
+    transition: background 0.3s ease;
+  }
+
+  // Soft neon border glow
+  filter: drop-shadow(0 2px 8px rgba(129, 140, 248, 0.1));
+
+  &:hover {
+    filter: drop-shadow(0 4px 12px rgba(129, 140, 248, 0.25));
+
+    &::before {
+      animation-duration: 1.8s; /* Snappy speed up sweep on hover */
+    }
+  }
+
+  &.inline-meta-bar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: 2rem; /* Capsule rounded bar matching status badge */
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+
+    &::after {
+      border-radius: calc(2rem - 1.5px);
+    }
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--text-color);
+      font-size: 0.825rem;
+      font-weight: 600;
+    }
+
+    .meta-icon {
+      font-size: 0.8rem;
+      color: var(--primary-color);
+      opacity: 0.85;
+    }
+
+    .meta-value {
+      white-space: nowrap;
+
+      &.format-badge {
+        background: rgba(14, 165, 233, 0.08);
+        color: #0284c7;
+        padding: 0.05rem 0.35rem;
+        border-radius: 0.25rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        border: 1px solid rgba(14, 165, 233, 0.15);
+      }
+    }
+
+    .meta-dot {
+      color: var(--text-color-secondary);
+      opacity: 0.5;
+      font-size: 1rem;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    // Dark Mode Overrides
+    [data-theme="dark"] & {
+      background: rgba(255, 255, 255, 0.05);
+
+      &::after {
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .meta-value.format-badge {
+        background: rgba(56, 189, 248, 0.12);
+        color: #38bdf8;
+        border-color: rgba(56, 189, 248, 0.2);
+      }
+    }
+  }
+
+  &.quad-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    padding: 1.25rem 1.5rem;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+
+    &::after {
+      border-radius: calc(1rem - 1.5px);
+    }
+
+    .grid-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center cell items horizontally */
+      gap: 0.6rem;
+      padding: 0.75rem 0.5rem;
+      text-align: center; /* Center text inside cell */
+      position: relative;
+      
+      &:nth-child(odd) {
+        border-right: 1px dashed var(--surface-border);
+      }
+      &:nth-child(1), &:nth-child(2) {
+        border-bottom: 1px dashed var(--surface-border);
+      }
+    }
+
+    .grid-icon {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      opacity: 0.9;
+    }
+
+    .grid-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center labels and values horizontally */
+      gap: 0.15rem;
+    }
+
+    .grid-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-color-secondary);
+    }
+
+    .grid-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-color);
+      white-space: nowrap;
+
+      &.format-badge {
+        background: rgba(14, 165, 233, 0.08);
+        color: #0284c7;
+        padding: 0.05rem 0.35rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border: 1px solid rgba(14, 165, 233, 0.15);
+      }
+    }
+
+    // Dark Mode Overrides
+    [data-theme="dark"] & {
+      background: rgba(255, 255, 255, 0.05);
+
+      &::after {
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .grid-cell {
+        &:nth-child(odd) {
+          border-right-color: rgba(255, 255, 255, 0.08);
+        }
+        &:nth-child(1), &:nth-child(2) {
+          border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+      }
+
+      .grid-value.format-badge {
+        background: rgba(56, 189, 248, 0.12);
+        color: #38bdf8;
+        border-color: rgba(56, 189, 248, 0.2);
+      }
+    }
+  }
+}
+
+// Animations for the glowing badge
+@keyframes border-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes status-pulse {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.6;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+    box-shadow: 0 0 8px 3px rgba(16, 185, 129, 0.3);
+  }
+}
+
 @media (max-width: 640px) {
   .app-content {
     padding: 1.75rem 0.75rem 3rem;
@@ -303,6 +650,59 @@ body {
     line-height: 1.55;
     padding: 0.55rem 1rem;
     border-radius: 0.8rem;
+  }
+
+  .status-badge-ready {
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+    
+    .status-dot {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
+  .specs-display-board.inline-meta-bar {
+    padding: 0.5rem 1.25rem;
+    gap: 0.4rem 0.6rem;
+    border-radius: 1.5rem;
+
+    .meta-item {
+      font-size: 0.75rem;
+    }
+
+    .meta-icon {
+      font-size: 0.75rem;
+    }
+
+    .meta-dot {
+      font-size: 0.85rem;
+    }
+  }
+
+  .specs-display-board.quad-grid {
+    padding: 0.75rem 1rem;
+    
+    .grid-cell {
+      padding: 0.5rem 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .grid-icon {
+      font-size: 0.95rem;
+    }
+
+    .grid-label {
+      font-size: 0.6rem;
+    }
+
+    .grid-value {
+      font-size: 0.775rem;
+      
+      &.format-badge {
+        font-size: 0.7rem;
+      }
+    }
   }
 }
 

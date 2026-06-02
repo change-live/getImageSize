@@ -1,12 +1,14 @@
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { Card } from "primereact/card";
-import { Tag } from "primereact/tag";
 import { DNA } from "react-loader-spinner";
 import { useTranslation } from "react-i18next";
 import { useImageStore } from "../../store/useImageStore";
 
 export function PreviewCard() {
   const { t } = useTranslation();
+  const [layoutType] = useState<"apple" | "camera">(() =>
+    Math.random() < 0.5 ? "apple" : "camera"
+  );
 
   const {
     width,
@@ -183,12 +185,116 @@ export function PreviewCard() {
 
   const cardFooter = (
     <div className="spec-footer" role="status" aria-live="polite">
-      <Tag
-        value={specsText ?? t("ready")}
-        severity={specsText ? "info" : undefined}
-        rounded
-        className="spec-tag"
-      />
+      {generatedConfig ? (
+        layoutType === "camera" ? (
+          /* ==================== 方案一：2x2 四格對稱參數面板 ==================== */
+          <div className="specs-display-board quad-grid">
+            {/* Cell 1: Size */}
+            <div className="grid-cell">
+              <i className="pi pi-expand grid-icon" aria-hidden="true" />
+              <div className="grid-content">
+                <span className="grid-label">{t("width")}×{t("height")}</span>
+                <span className="grid-value">{generatedConfig.width} × {generatedConfig.height}</span>
+              </div>
+            </div>
+            
+            {/* Cell 2: Format */}
+            <div className="grid-cell">
+              <i className="pi pi-file grid-icon" aria-hidden="true" />
+              <div className="grid-content">
+                <span className="grid-label">{t("format")}</span>
+                <span className="grid-value format-badge">{generatedConfig.format.toUpperCase()}</span>
+              </div>
+            </div>
+            
+            {/* Cell 3: Source */}
+            <div className="grid-cell">
+              <i className="pi pi-images grid-icon" aria-hidden="true" />
+              <div className="grid-content">
+                <span className="grid-label">{t("imageSource")}</span>
+                <span className="grid-value">
+                  {generatedConfig.imageSource === "picsum"
+                    ? t("imageSourcePicsum")
+                    : generatedConfig.imageSource === "loremflickr"
+                      ? t("imageSourceLoremFlickr")
+                      : generatedConfig.imageSource === "unsplash"
+                        ? t("imageSourceUnsplash")
+                        : t("imageSourceGeometry")}
+                </span>
+              </div>
+            </div>
+            
+            {/* Cell 4: Effects (Always rendered to maintain perfect 2x2 symmetry!) */}
+            <div className="grid-cell">
+              <i className="pi pi-sliders-h grid-icon" aria-hidden="true" />
+              <div className="grid-content">
+                <span className="grid-label">{t("blur")}/{t("grayscale")}</span>
+                <span className="grid-value">
+                  {generatedConfig.useGrayscale || generatedConfig.blurAmount > 0 ? (
+                    <>
+                      {generatedConfig.useGrayscale ? t("grayscale") : ""}
+                      {generatedConfig.useGrayscale && generatedConfig.blurAmount > 0 ? " + " : ""}
+                      {generatedConfig.blurAmount > 0 ? `${t("blur")}:${generatedConfig.blurAmount}` : ""}
+                    </>
+                  ) : (
+                    t("none")
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* ==================== 方案三：Apple 風極簡橫向流線列 ==================== */
+          <div className="specs-display-board inline-meta-bar">
+            <span className="meta-item">
+              <i className="pi pi-expand meta-icon" aria-hidden="true" />
+              <span className="meta-value">{generatedConfig.width} × {generatedConfig.height}</span>
+            </span>
+            
+            <span className="meta-dot" aria-hidden="true">·</span>
+            
+            <span className="meta-item">
+              <i className="pi pi-file meta-icon" aria-hidden="true" />
+              <span className="meta-value format-badge">{generatedConfig.format.toUpperCase()}</span>
+            </span>
+            
+            <span className="meta-dot" aria-hidden="true">·</span>
+            
+            <span className="meta-item">
+              <i className="pi pi-images meta-icon" aria-hidden="true" />
+              <span className="meta-value">
+                {generatedConfig.imageSource === "picsum"
+                  ? t("imageSourcePicsum")
+                  : generatedConfig.imageSource === "loremflickr"
+                    ? t("imageSourceLoremFlickr")
+                    : generatedConfig.imageSource === "unsplash"
+                      ? t("imageSourceUnsplash")
+                      : t("imageSourceGeometry")}
+              </span>
+            </span>
+
+            {((generatedConfig.useGrayscale) || (generatedConfig.blurAmount > 0)) && (
+              <>
+                <span className="meta-dot" aria-hidden="true">·</span>
+                
+                <span className="meta-item">
+                  <i className="pi pi-sliders-h meta-icon" aria-hidden="true" />
+                  <span className="meta-value">
+                    {generatedConfig.useGrayscale ? t("grayscale") : ""}
+                    {generatedConfig.useGrayscale && generatedConfig.blurAmount > 0 ? " + " : ""}
+                    {generatedConfig.blurAmount > 0 ? `${t("blur")}:${generatedConfig.blurAmount}` : ""}
+                  </span>
+                </span>
+              </>
+            )}
+          </div>
+        )
+      ) : (
+        <div className="status-badge-ready">
+          <span className="status-dot" aria-hidden="true" />
+          <span className="status-text">{t("ready")}</span>
+        </div>
+      )}
     </div>
   );
 

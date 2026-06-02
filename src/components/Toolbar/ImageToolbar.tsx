@@ -71,7 +71,7 @@ export function ImageToolbar() {
       if (target && target.closest && target.closest(".p-menu")) return;
 
       if (languageMenuRef.current) {
-        (languageMenuRef.current as any).hide(e);
+        (languageMenuRef.current as unknown as { hide: (e: Event) => void }).hide(e);
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
