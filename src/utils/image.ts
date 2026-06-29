@@ -24,7 +24,7 @@ export function buildLoremFlickrUrl(
   lockId: number,
 ): string {
   const filter = grayscale ? "g/" : "";
-  return `https://loremflickr.com/${filter}${w}/${h}/all?lock=${lockId}`;
+  return `https://loremflickr.com/${filter}${w}/${h}/random?lock=${lockId}`;
 }
 
 export function getArtData(w: number, h: number) {
