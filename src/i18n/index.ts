@@ -5,6 +5,9 @@ const resources = {
   "zh-TW": {
     translation: {
       appTitle: "圖片生成器",
+      seoTitle: "圖片生成器 | 佔位圖片快速生成與下載工具",
+      seoDescription: "一款現代化、響應式的佔位圖片生成工具。支援自訂尺寸、多種圖片格式（SVG, PNG, JPG, WebP）、外部圖庫來源（Picsum, LoremFlickr, Unsplash），以及豐富的濾鏡特效（灰階, 模糊），為開發者與設計師提供快速便利的測試圖片生成。",
+      seoKeywords: "圖片生成器, 佔位圖片, 圖片尺寸, 隨機圖片, Picsum, Unsplash, LoremFlickr, WebP, SVG, PNG, JPG, 圖片編輯, 網頁開發工具, 圖片下載",
       width: "寬度",
       height: "高度",
       format: "格式",
@@ -45,6 +48,9 @@ const resources = {
   en: {
     translation: {
       appTitle: "Image Generator",
+      seoTitle: "Image Generator | Fast Placeholder Image Tool & Downloader",
+      seoDescription: "A modern and responsive placeholder image generator. Supports custom sizes, multiple formats (SVG, PNG, JPG, WebP), external image libraries (Picsum, LoremFlickr, Unsplash), and rich filter effects like grayscale and blur, perfect for developer and designer placeholders.",
+      seoKeywords: "image generator, placeholder image, image size, random image, Picsum, Unsplash, LoremFlickr, WebP, SVG, PNG, JPG, image editor, developer tools, download image",
       width: "Width",
       height: "Height",
       format: "Format",

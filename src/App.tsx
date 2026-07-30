@@ -1,10 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { ImageToolbar } from "./components/Toolbar/ImageToolbar";
 import { PreviewCard } from "./components/Preview/PreviewCard";
+import { useSEO } from "./hooks/useSEO";
 import "./App.scss";
 
 export default function App() {
   const { t } = useTranslation();
+  
+  // Dynamic SEO Synchronization
+  useSEO();
 
   return (
     <>
