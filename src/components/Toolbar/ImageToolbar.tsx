@@ -82,7 +82,6 @@ export function ImageToolbar() {
   const supportsExternalSource = format === "jpg" || format === "webp";
   const isExternal =
     imageSource === "picsum" ||
-    imageSource === "placeholders" ||
     imageSource === "unsplash";
   const isExternalSizeExceeded =
     supportsExternalSource &&
@@ -198,10 +197,8 @@ export function ImageToolbar() {
           blurAmount,
           nextSeed,
         );
-      } else {
-        url = buildPlaceholdersUrl(width, height, lockId);
       }
-
+      
       setExternalSeed(nextSeed);
       setIsExternalLoading(true);
     } else if (format === "svg") {
@@ -371,9 +368,9 @@ export function ImageToolbar() {
           value={imageSource}
           options={imageSourceOptions}
           onChange={(e) => {
-            const nextSource = e.value as "geometry" | "picsum" | "placeholders" | "unsplash";
+            const nextSource = e.value as "geometry" | "picsum" | "unsplash";
             setImageSource(nextSource);
-            if (!["picsum", "placeholders", "unsplash"].includes(nextSource)) {
+            if (!["picsum", "unsplash"].includes(nextSource)) {
               setIsExternalLoading(false);
             }
           }}
@@ -599,9 +596,9 @@ export function ImageToolbar() {
                     value={imageSource}
                     options={imageSourceOptions}
                     onChange={(e) => {
-                      const nextSource = e.value as "geometry" | "picsum" | "placeholders" | "unsplash";
+                      const nextSource = e.value as "geometry" | "picsum" | "unsplash";
                       setImageSource(nextSource);
-                      if (!["picsum", "placeholders", "unsplash"].includes(nextSource)) {
+                      if (!["picsum", "unsplash"].includes(nextSource)) {
                         setIsExternalLoading(false);
                       }
                     }}

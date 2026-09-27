@@ -17,14 +17,6 @@ export function buildPicsumUrl(
   return `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}.${format}${qs}`;
 }
 
-export function buildPlaceholdersUrl(
-  w: number,
-  h: number,
-  seed: number,
-): string {
-  // placeholders.io API: https://placeholders.io/{width}/{height}?seed={seed}
-  return `https://placeholders.io/${w}/${h}?seed=${seed}`;
-}
 
 export function getArtData(w: number, h: number) {
   const hue = Math.random() * 360;
