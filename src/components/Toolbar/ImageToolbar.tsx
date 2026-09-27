@@ -17,7 +17,6 @@ import { useImageStore } from "../../store/useImageStore";
 import { useTheme } from "../../hooks/useTheme";
 import {
   buildPicsumUrl,
-  buildPlaceholdersUrl,
   generateSVGString,
   generateCanvasDataUrl,
 } from "../../utils/image";
