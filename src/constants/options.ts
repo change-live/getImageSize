@@ -13,7 +13,7 @@ export const LANGUAGES = [
 export const IMAGE_SOURCE_OPTIONS = [
   { labelKey: "imageSourceGeometry", value: "geometry" },
   { labelKey: "imageSourcePicsum", value: "picsum" },
-  { labelKey: "imageSourceLoremFlickr", value: "loremflickr" },
+  { labelKey: "imageSourcePlaceholders", value: "placeholders" },
   { labelKey: "imageSourceUnsplash", value: "unsplash" },
 ];
 

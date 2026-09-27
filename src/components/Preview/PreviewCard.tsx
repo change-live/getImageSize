@@ -26,7 +26,7 @@ export function PreviewCard() {
   const supportsExternalSource = format === "jpg" || format === "webp";
   const isExternal =
     imageSource === "picsum" ||
-    imageSource === "loremflickr" ||
+    imageSource === "placeholders" ||
     imageSource === "unsplash";
   const isExternalSizeExceeded =
     supportsExternalSource &&
@@ -43,8 +43,8 @@ export function PreviewCard() {
     const sourceText =
       generatedConfig.imageSource === "picsum"
         ? t("imageSourcePicsum")
-        : generatedConfig.imageSource === "loremflickr"
-          ? t("imageSourceLoremFlickr")
+        : generatedConfig.imageSource === "placeholders"
+          ? t("imageSourcePlaceholders")
           : generatedConfig.imageSource === "unsplash"
             ? t("imageSourceUnsplash")
             : t("imageSourceGeometry");
@@ -215,8 +215,8 @@ export function PreviewCard() {
                 <span className="grid-value">
                   {generatedConfig.imageSource === "picsum"
                     ? t("imageSourcePicsum")
-                    : generatedConfig.imageSource === "loremflickr"
-                      ? t("imageSourceLoremFlickr")
+                    : generatedConfig.imageSource === "placeholders"
+                      ? t("imageSourcePlaceholders")
                       : generatedConfig.imageSource === "unsplash"
                         ? t("imageSourceUnsplash")
                         : t("imageSourceGeometry")}
@@ -265,8 +265,8 @@ export function PreviewCard() {
               <span className="meta-value">
                 {generatedConfig.imageSource === "picsum"
                   ? t("imageSourcePicsum")
-                  : generatedConfig.imageSource === "loremflickr"
-                    ? t("imageSourceLoremFlickr")
+                  : generatedConfig.imageSource === "placeholders"
+                    ? t("imageSourcePlaceholders")
                     : generatedConfig.imageSource === "unsplash"
                       ? t("imageSourceUnsplash")
                       : t("imageSourceGeometry")}

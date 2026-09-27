@@ -17,7 +17,7 @@ import { useImageStore } from "../../store/useImageStore";
 import { useTheme } from "../../hooks/useTheme";
 import {
   buildPicsumUrl,
-  buildLoremFlickrUrl,
+  buildPlaceholdersUrl,
   generateSVGString,
   generateCanvasDataUrl,
 } from "../../utils/image";
@@ -82,7 +82,7 @@ export function ImageToolbar() {
   const supportsExternalSource = format === "jpg" || format === "webp";
   const isExternal =
     imageSource === "picsum" ||
-    imageSource === "loremflickr" ||
+    imageSource === "placeholders" ||
     imageSource === "unsplash";
   const isExternalSizeExceeded =
     supportsExternalSource &&
@@ -199,7 +199,7 @@ export function ImageToolbar() {
           nextSeed,
         );
       } else {
-        url = buildLoremFlickrUrl(width, height, useGrayscale, lockId);
+        url = buildPlaceholdersUrl(width, height, lockId);
       }
 
       setExternalSeed(nextSeed);
@@ -371,9 +371,9 @@ export function ImageToolbar() {
           value={imageSource}
           options={imageSourceOptions}
           onChange={(e) => {
-            const nextSource = e.value as "geometry" | "picsum" | "loremflickr" | "unsplash";
+            const nextSource = e.value as "geometry" | "picsum" | "placeholders" | "unsplash";
             setImageSource(nextSource);
-            if (!["picsum", "loremflickr", "unsplash"].includes(nextSource)) {
+            if (!["picsum", "placeholders", "unsplash"].includes(nextSource)) {
               setIsExternalLoading(false);
             }
           }}
@@ -599,9 +599,9 @@ export function ImageToolbar() {
                     value={imageSource}
                     options={imageSourceOptions}
                     onChange={(e) => {
-                      const nextSource = e.value as "geometry" | "picsum" | "loremflickr" | "unsplash";
+                      const nextSource = e.value as "geometry" | "picsum" | "placeholders" | "unsplash";
                       setImageSource(nextSource);
-                      if (!["picsum", "loremflickr", "unsplash"].includes(nextSource)) {
+                      if (!["picsum", "placeholders", "unsplash"].includes(nextSource)) {
                         setIsExternalLoading(false);
                       }
                     }}

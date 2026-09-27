@@ -17,14 +17,13 @@ export function buildPicsumUrl(
   return `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}.${format}${qs}`;
 }
 
-export function buildLoremFlickrUrl(
+export function buildPlaceholdersUrl(
   w: number,
   h: number,
-  grayscale: boolean,
-  lockId: number,
+  seed: number,
 ): string {
-  const filter = grayscale ? "g/" : "";
-  return `https://loremflickr.com/${filter}${w}/${h}?lock=${lockId}`;
+  // placeholders.io API: https://placeholders.io/{width}/{height}?seed={seed}
+  return `https://placeholders.io/${w}/${h}?seed=${seed}`;
 }
 
 export function getArtData(w: number, h: number) {
