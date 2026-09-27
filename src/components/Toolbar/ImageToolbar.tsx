@@ -180,24 +180,22 @@ export function ImageToolbar() {
     }
 
     setPhotographer(null, null);
-    let url: string;
+    let url = "";
 
     if (supportsExternalSource && isExternal) {
       const lockId = Math.floor(Math.random() * 1_000_000) + 1;
       const nextSeed = `${Date.now()}-${lockId}`;
       const externalFormat = format as "jpg" | "webp";
 
-      if (imageSource === "picsum") {
-        url = buildPicsumUrl(
-          width,
-          height,
-          externalFormat,
-          useGrayscale,
-          blurAmount,
-          nextSeed,
-        );
-      }
-      
+      url = buildPicsumUrl(
+        width,
+        height,
+        externalFormat,
+        useGrayscale,
+        blurAmount,
+        nextSeed,
+      );
+
       setExternalSeed(nextSeed);
       setIsExternalLoading(true);
     } else if (format === "svg") {
